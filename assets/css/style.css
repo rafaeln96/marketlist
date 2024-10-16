@@ -239,22 +239,28 @@ header {
     border: 1px solid #ddd;
     border-radius: 5px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .item-display-section .item button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    border: none;
     background-color: #ff4d4d;
     color: white;
     padding: 0.5rem;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 1rem;
+    border: none;
 }
 
 .item-display-section .item button:hover {
     background-color: #cc0000;
+}
+
+/* Estilo centralizado para todos os itens dentro do card */
+.item-display-section .item div {
+    text-align: center;
 }
 
 .total-display-section {
