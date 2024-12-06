@@ -218,10 +218,6 @@ header {
 
 /* Estilo da seção de itens adicionados */
 .item-display-section {
-    display: flex; /* Ativa o layout flexbox */
-    flex-wrap: wrap; /* Permite quebra de linha caso necessário */
-    justify-content: flex-start; /* Alinha os cartões à esquerda */
-    gap: 16px; /* Espaçamento entre os cartões */
     padding: 2rem 6rem;
     background-color: #f9f9f9;
     margin-top: 2rem;
@@ -235,21 +231,19 @@ header {
     color: #333;
 }
 
-/* Estilo de cada item como cartão */
+/* Estilo das notas fiscais */
 .item-display-section .item {
-    width: 200px; /* Largura fixa dos cartões */
     background-color: #ffffe0; /* Cor de fundo amarelo claro */
     padding: 1rem;
+    margin-bottom: 1rem;
     border: 1px solid #ddd;
     border-radius: 5px;
+    position: relative;
     display: flex;
-    flex-direction: row; /* Conteúdo alinhado */
+    flex-direction: column;
     align-items: center;
-    text-align: left; /* Alinha texto à esquerda */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
 }
 
-/* Botão de remover no cartão */
 .item-display-section .item button {
     background-color: #ff4d4d;
     color: white;
