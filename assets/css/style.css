@@ -5,6 +5,7 @@
     padding: 0;
     margin: 0;
     font-family: 'Oswald', sans-serif;
+    box-sizing: border-box;
 }
 
 /* Estilo do cabeçalho */
@@ -69,173 +70,31 @@ header {
     font-size: 1.1rem;
 }
 
-/* Estilo do ícone do menu mobile */
+/* Estilo do menu mobile */
 .mobile-menu-icon {
     display: none;
 }
 
-/* Estilo do menu mobile */
-.mobile-menu {
-    display: none; /* O menu mobile está oculto por padrão */
-    flex-direction: column;
-    align-items: center; /* Centraliza o menu quando exibido */
-    padding: 1rem;
-    position: absolute;
-    top: 100%; /* Posiciona o menu logo abaixo do cabeçalho */
-    left: 0;
-    right: 0;
-    background-color: #24252a;
-    box-shadow: 0px 3px 10px #464646;
-    z-index: 1000; /* Garante que o menu fique acima de outros conteúdos */
-}
-
-.mobile-menu ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centraliza os itens da lista */
-    list-style: none; /* Remove os pontinhos da lista */
-    margin: 0;
-    padding: 0;
-}
-
-.mobile-menu .nav-item {
-    padding-top: 1.2rem;
-}
-
-.mobile-menu .login-button {
-    padding: 1rem 2rem;
-    margin-top: 1rem; /* Adiciona margem superior para separar do conteúdo acima */
-}
-
-.mobile-menu .login-button button {
-    width: 100%;
-}
-
-/* Exibe o menu mobile somente quando a classe 'open' é aplicada */
-.mobile-menu.open {
-    display: flex; /* Exibe o menu quando está aberto */
-}
-
-@media screen and (max-width: 730px) {
-    /* Ajuste do padding da barra de navegação em telas pequenas */
-    .nav-bar {
-        padding: 1.5rem 4rem;
-    }
-    
-    /* Esconde a lista de navegação e o botão de login em telas pequenas */
-    .nav-list {
-        display: none;
-    }
-    .login-button {
-        display: none;
-    }
-    
-    /* Exibe o ícone do menu mobile em telas pequenas */
-    .mobile-menu-icon {
-        display: block;
-    }
-    .mobile-menu-icon button {
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-    }
-}
-
-.market-list-section {
-    padding: 2rem 6rem;
-    background-color: #f4f4f4;
-    margin-top: 2rem;
-    box-shadow: 0px 3px 10px #ccc;
-    text-align: center;
-}
-
-.market-list-section h2 {
+/* Estilo do título centralizado */
+.item-display-section h2 {
     font-size: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     color: #333;
+    text-align: center;
+    margin-left: 2rem;
 }
 
-/* Estilo das linhas do formulário */
-.form-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-/* Estilo dos grupos de formulário */
-.form-group {
-    flex: 1;
-    min-width: 200px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #333;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
-
-/* Estilo do botão do formulário */
-.form-group button {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    background-color: #0187a7;
-    color: white;
-    font-size: 1.15rem;
-    cursor: pointer;
-    margin-top: 1rem; /* Adiciona uma margem superior para separar do conteúdo acima */
-}
-
-.form-group button:hover {
-    background-color: #016d89;
-}
-
-@media screen and (max-width: 730px) {
-    /* Ajuste do padding da seção de lista de mercado em telas pequenas */
-    .market-list-section {
-        padding: 2rem 2rem;
-    }
-    
-    /* Ajuste das linhas do formulário em telas pequenas */
-    .form-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-}
-
-/* Estilo da seção de itens adicionados */
+/* Estilo dos cartões */
 .item-display-section {
-    display: flex; /* Ativa o layout flexbox */
-    flex-wrap: wrap; /* Permite quebra de linha caso necessário */
-    justify-content: flex-start; /* Alinha os cartões à esquerda */
+    display: flex; /* Exibe os cartões em linha */
     gap: 16px; /* Espaçamento entre os cartões */
     padding: 2rem 6rem;
     background-color: #f9f9f9;
     margin-top: 2rem;
-    box-shadow: 0px 3px 10px #ccc;
-    text-align: center;
+    justify-content: flex-start; /* Alinha os cartões à esquerda */
+    flex-wrap: nowrap; /* Impede a quebra para a próxima linha */
 }
 
-.item-display-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    color: #333;
-}
-
-/* Estilo de cada item como cartão */
 .item-display-section .item {
     width: 200px; /* Largura fixa dos cartões */
     background-color: #ffffe0; /* Cor de fundo amarelo claro */
@@ -264,11 +123,12 @@ header {
     background-color: #cc0000;
 }
 
-/* Estilo centralizado para todos os itens dentro do card */
+/* Centraliza o texto dentro do cartão */
 .item-display-section .item div {
     text-align: center;
 }
 
+/* Seção de totais */
 .total-display-section {
     padding: 2rem 6rem;
     background-color: #f4f4f4;
@@ -285,4 +145,17 @@ header {
 .total-display-section #total-value {
     font-weight: bold;
     color: #0187a7;
+}
+
+/* Responsividade */
+@media screen and (max-width: 730px) {
+    .item-display-section {
+        flex-wrap: wrap; /* Permite a quebra de linha para telas menores */
+        justify-content: center;
+    }
+
+    .item-display-section h2 {
+        text-align: center;
+        margin-left: 0; /* Centraliza o título para telas menores */
+    }
 }
