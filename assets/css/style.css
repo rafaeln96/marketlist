@@ -228,6 +228,8 @@ header {
     margin-top: 2rem;
     box-shadow: 0px 3px 10px #ccc;
     text-align: center;
+    overflow: auto;
+    height: 400px;
 }
 
 #item-name {
