@@ -11,13 +11,37 @@ function populateQuantityOptions() {
     }
 }
 
+// Converte o valor formatado (ex.: 1.234,56) para um número decimal
+function parseMoeda(valorFormatado) {
+    if (!valorFormatado) return 0;
+    return parseFloat(valorFormatado.replace(/\./g, '').replace(',', '.'));
+}
+
+// Formata o valor como moeda durante a digitação
+function formatarMoeda(input) {
+    // Remove todos os caracteres que não sejam números
+    let valor = input.value.replace(/\D/g, '');
+    
+    // Converte para um valor decimal dividido por 100
+    let decimal = (valor / 100).toFixed(2);
+
+    // Formata o número no padrão brasileiro (com vírgula e pontos)
+    let formatado = new Intl.NumberFormat('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(decimal);
+
+    // Atualiza o valor do campo
+    input.value = formatado;
+}
+
 // Adiciona um item à lista e calcula o valor total
 function addItem(event) {
     event.preventDefault();
 
     const itemName = document.getElementById('item-name').value;
     const itemQuantity = parseInt(document.getElementById('item-quantity').value, 10);
-    const itemPrice = parseFloat(document.getElementById('item-price').value);
+    const itemPrice = parseMoeda(document.getElementById('item-price').value); // Usa a função parseMoeda
 
     if (!itemName || isNaN(itemQuantity) || isNaN(itemPrice)) {
         alert('Por favor, preencha todos os campos corretamente.');
@@ -68,8 +92,8 @@ function updateItemList() {
         itemDiv.innerHTML = `
             <strong>Nome:</strong> ${item.name}<br>
             <strong>Quantidade:</strong> ${item.quantity}<br>
-            <strong>Valor Unitário:</strong> R$ ${item.price.toFixed(2)}<br>
-            <strong>Total:</strong> R$ ${item.total.toFixed(2)}
+            <strong>Valor Unitário:</strong> R$ ${item.price.toFixed(2).replace('.', ',')}<br>
+            <strong>Total:</strong> R$ ${item.total.toFixed(2).replace('.', ',')}
             <button onclick="removeItem(${index})">Remover</button>
         `;
         itemList.appendChild(itemDiv);
