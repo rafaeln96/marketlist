@@ -65,7 +65,7 @@
                     
                     <div class="form-group">
                         <label for="item-price">Valor (R$):</label>
-                        <input type="number" id="item-price" name="item-price" step="0.01" min="0" required placeholder="R$0,00">
+                        <input type="text" id="item-price" name="item-price" required placeholder="R$0,00" oninput="formatarMoeda(this)">
                     </div>
                 </div>
                 
@@ -81,7 +81,7 @@
         </section>
 
         <section class="total-display-section">
-            <h2>Valor Total de suas Compras: <span id="total-value">R$ 0,00</span></h2>
+            <h2>VALOR TOTAL: <span id="total-value">R$ 0,00</span></h2>
         </section>
     </main>
     
