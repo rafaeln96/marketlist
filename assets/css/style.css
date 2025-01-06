@@ -229,7 +229,7 @@ header {
     box-shadow: 0px 3px 10px #ccc;
     text-align: center;
     overflow: auto;
-    height: 400px;
+    height: 500px;
 }
 
 #item-name {
@@ -275,17 +275,52 @@ header {
     flex-wrap: wrap;
 }
 
-.item-display-section .item button {
-    background-color: #ff4d4d;
+/* Botão verde para "Atualizar Item" */
+button#update-item-button {
+    background-color: #28a745; /* Verde */
+    color: white; /* Texto branco */
+    border: none; /* Sem borda */
+    padding: 0.75rem 1.5rem; /* Ajuste para ficar igual ao botão de adicionar item */
+    font-size: 1.15rem; /* Tamanho do texto igual ao do botão de adicionar item */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de ponteiro ao passar */
+    transition: background-color 0.3s ease; /* Transição suave */
+}
+
+button#update-item-button:hover {
+    background-color: #218838; /* Verde mais escuro no hover */
+}
+
+/* Botão verde para "Editar" nos cards */
+button.edit-button {
+    background-color: #28a745; /* Verde */
+    color: white; /* Texto branco */
+    border: none; /* Sem borda */
+    padding: 0.5rem 1rem; /* Menor que o botão de remover */
+    margin-top: 0.5rem; /* Adiciona margem superior para separar do conteúdo acima */
+    font-size: 1rem; /* Tamanho do texto menor */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de ponteiro ao passar */
+    transition: background-color 0.3s ease; /* Transição suave */
+}
+
+button.edit-button:hover {
+    background-color: #218838; /* Verde mais escuro no hover */
+}
+
+/* Botão vermelho para "Remover" */
+.item-display-section .item button:not(.edit-button) {
+    background-color: #ff4d4d; /* Vermelho para outros botões */
     color: white;
-    padding: 0.5rem;
+    padding: 0.75rem 1.5rem; /* Mesmo padding para uniformidade */
+    font-size: 1rem;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     border: none;
 }
 
-.item-display-section .item button:hover {
+.item-display-section .item button:not(.edit-button):hover {
     background-color: #cc0000;
 }
 
