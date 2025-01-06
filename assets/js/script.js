@@ -1,5 +1,6 @@
 let itemsArray = []; // Array para armazenar os itens
 let editIndex = null; // Índice do item sendo editado
+let previousScrollPosition = 0; // Variável para armazenar a posição anterior de rolagem
 
 // Gera opções para o seletor de quantidade (1 a 100)
 function populateQuantityOptions() {
@@ -105,6 +106,12 @@ function updateItem(event) {
 
     // Alterna os botões para o estado normal
     toggleFormButtons(false);
+
+    // Volta para a posição anterior após a atualização
+    window.scrollTo({
+        top: previousScrollPosition,
+        behavior: 'smooth'  // A rolagem será suave
+    });
 }
 
 // Remove um item da lista
@@ -125,6 +132,15 @@ function editItem(index) {
 
     // Alterna os botões para o modo de edição
     toggleFormButtons(true);
+
+    // Salva a posição atual de rolagem antes de ir para o topo
+    previousScrollPosition = window.scrollY;
+
+    // Faz a rolagem para o topo da página
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'  // A rolagem será suave
+    });
 }
 
 // Atualiza a lista de itens e organiza em ordem alfabética
@@ -138,7 +154,7 @@ function updateItemList() {
     itemsArray.forEach((item, index) => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'item';
-        itemDiv.innerHTML = `
+        itemDiv.innerHTML = ` 
             <strong>Nome:</strong> ${item.name}<br>
             <strong>Quantidade:</strong> ${item.quantity}<br>
             <strong>Valor Unitário:</strong> R$ ${item.price.toFixed(2).replace('.', ',')}<br>
