@@ -31,9 +31,12 @@ O **Market List** é uma aplicação web que permite aos usuários criar e geren
 - ✅ Persistência de dados (localStorage)
 - ✅ Ordenação alfabética automática
 - ✅ Notificações visuais de feedback
-- ✅ Validação de duplicidade (case-insensitive)
-- ✅ Calculadora integrada com glassmorphism
-- ✅ Contador de itens
+- ✨ Validação de duplicidade de itens (case-insensitive)
+- ✨ Contador de itens ao lado do total
+- ✨ Efeito glassmorphism na calculadora
+- 📦 **Suporte a itens por Peso (Kg)**
+- 📄 **Exportação PDF Profissional** com agrupamento inteligente
+- 📱 Responsividade 100% para dispositivos móveis
 
 ---
 
@@ -44,6 +47,8 @@ O **Market List** é uma aplicação web que permite aos usuários criar e geren
 | HTML5 | - | Estrutura semântica da página |
 | CSS3 | - | Estilização com variáveis CSS e animações |
 | JavaScript | ES6+ | Lógica da aplicação (vanilla, sem frameworks) |
+| jsPDF | 2.5.1 | Geração de documentos PDF |
+| AutoTable | 3.5.23 | Tabelas profissionais no PDF |
 | Google Fonts | Poppins | Tipografia moderna |
 
 > ⚠️ **Importante**: O projeto deve manter o uso exclusivo de HTML, CSS e JavaScript puros para compatibilidade com hospedagem estática no GitHub Pages.
@@ -56,6 +61,7 @@ O **Market List** é uma aplicação web que permite aos usuários criar e geren
 marketlist-main/
 ├── index.html              # Página principal da aplicação
 ├── calculadora.html        # Página da calculadora
+├── sobre.html              # Página sobre o projeto
 ├── README.md               # Esta documentação
 ├── DOCS.md                 # Documentação técnica detalhada
 └── assets/
@@ -75,30 +81,35 @@ marketlist-main/
 ## ⚡ Funcionalidades
 
 ### 1. Adicionar Itens
-- Campos: Nome, Quantidade (1-100), Valor Unitário
-- Validação de campos obrigatórios
-- Formatação automática de moeda (R$)
+- **Modos**: Unidade ou Peso (Kg)
+- Campos: Nome, Qtd (1-100), Preço Un/Kg, Peso (se modo peso)
+- Formatação automática de moeda (R$) e peso (0,000)
 
 ### 2. Editar Itens
-- Carrega dados no formulário
+- Carrega dados preservando o modo (unidade/peso)
 - Alterna botão para "Atualizar Item"
 - Rolagem suave para o topo
 
 ### 3. Remover Itens
 - Remove item do array e localStorage
-- Notificação de confirmação
+- Notificação de confirmação (confirm)
 
-### 4. Buscar Itens
+### 4. Exportação PDF
+- **Design Premium**: Cores do site e efeito glassmorphism
+- **Agrupamento**: Tabelas separadas por tipo de item
+- **Resumo**: Valor total e contador destacados
+
+### 5. Buscar Itens
 - Filtro em tempo real por nome
 - Campo de busca na seção de itens
 
-### 5. Persistência
+### 6. Persistência
 - Dados salvos automaticamente no localStorage
 - Carregamento automático ao abrir a página
 
-### 6. Cálculos Automáticos
-- Subtotal por item (quantidade × valor)
-- Total geral de todos os itens
+### 7. Cálculos Automáticos
+- Subtotal dinâmico (Qtd × Preço ou Preço/Kg × Peso)
+- Total geral e contador de itens real-time
 
 ---
 
@@ -193,12 +204,17 @@ O projeto está configurado para deploy automático via GitHub Pages:
 
 ## 🔄 Histórico de Atualizações
 
+### v2.3.0 (24/01/2026)
+- ✨ **Suporte a itens por Peso (Kg)** com cálculo dinâmico
+- ✨ **Exportação PDF Profissional** com agrupamento e design glassmorphism
+- 🎨 Refinamento do Layout Grid (3 colunas) para centralização de títulos
+- 📱 Melhoria na responsividade do cabeçalho e empilhamento mobile
+
 ### v2.2.0 (24/01/2026)
 - ✨ Validação de duplicidade de itens (case-insensitive)
 - ✨ Contador de itens ao lado do total
 - ✨ Efeito glassmorphism na calculadora
 - 📱 Responsividade 100% para dispositivos móveis
-- 📱 Breakpoints: 900px, 730px, 480px
 
 ### v2.1.0 (24/01/2026)
 - ✨ Valor total movido para o header da seção

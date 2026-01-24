@@ -550,6 +550,159 @@ function menuShow() {
     mobileMenu.classList.toggle('open');
 }
 
+// ===== Export Function =====
+
+async function exportToPDF() {
+    if (itemsArray.length === 0) {
+        showNotification('Sua lista está vazia. Adicione itens antes de exportar.', 'error');
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Palette do Projeto
+    const primaryDark = [26, 38, 52]; // #1a2634 (Azul Escuro)
+    const primaryTeal = [32, 166, 154]; // #20a69a (Verde/Teal)
+    const dangerRed = [220, 53, 69];
+
+    // --- Cabeçalho com Efeito de Degradê Simulado ---
+    // Fundo principal azul escuro
+    doc.setFillColor(...primaryDark);
+    doc.rect(0, 0, 210, 45, 'F');
+
+    // Pequena faixa teal na base para simular transição/degradê
+    doc.setFillColor(...primaryTeal);
+    doc.rect(0, 40, 210, 5, 'F');
+
+    doc.setFontSize(28);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Market List', 20, 25);
+
+    const today = new Date().toLocaleDateString('pt-BR');
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(255, 255, 255);
+    doc.text(`CUPOM DE COMPRAS • EMITIDO EM: ${today}`, 20, 33);
+
+    // Separar itens por tipo
+    const unitItems = itemsArray.filter(i => i.type !== 'weight');
+    const weightItems = itemsArray.filter(i => i.type === 'weight');
+
+    let currentY = 60;
+
+    const generateTable = (title, items) => {
+        if (items.length === 0) return;
+
+        doc.setFontSize(12);
+        doc.setTextColor(...primaryDark);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title.toUpperCase(), 20, currentY);
+        currentY += 6;
+
+        const tableData = items.map((item, idx) => {
+            let qty = item.type === 'weight'
+                ? `${item.weight.toFixed(3).replace('.', ',')} Kg`
+                : item.quantity;
+
+            let unitPrice = item.type === 'weight'
+                ? `R$ ${item.pricePerKg.toFixed(2).replace('.', ',')}/Kg`
+                : `R$ ${item.price.toFixed(2).replace('.', ',')}`;
+
+            if (item.type === 'weight' && item.quantity > 1) {
+                qty = `${item.quantity}x (${qty})`;
+            }
+
+            return [
+                idx + 1,
+                item.name,
+                qty,
+                unitPrice,
+                `R$ ${item.total.toFixed(2).replace('.', ',')}`
+            ];
+        });
+
+        doc.autoTable({
+            startY: currentY,
+            head: [['#', 'PRODUTO', 'QTD / PESO', 'VLR. UNITÁRIO', 'SUBTOTAL']],
+            body: tableData,
+            theme: 'grid',
+            headStyles: {
+                fillColor: primaryDark,
+                fontSize: 8,
+                halign: 'center',
+                fontStyle: 'bold',
+                lineWidth: 0.1
+            },
+            styles: {
+                fontSize: 8,
+                cellPadding: 3,
+                valign: 'middle',
+                lineWidth: 0.1, // Linhas mais finas
+                lineColor: [220, 220, 220]
+            },
+            columnStyles: {
+                0: { halign: 'center', cellWidth: 10 },
+                1: { fontStyle: 'bold', cellWidth: 'auto' },
+                2: { halign: 'center' },
+                3: { halign: 'right' },
+                4: { halign: 'right', fontStyle: 'bold', textColor: primaryTeal }
+            },
+            margin: { left: 20, right: 20 },
+            didDrawPage: (data) => {
+                currentY = data.cursor.y;
+            }
+        });
+        currentY += 15;
+    };
+
+    // Renderizar tabelas
+    generateTable('Itens por Unidade', unitItems);
+    generateTable('Itens por Peso', weightItems);
+
+    // --- Seção de Resumo (Simulação de Glassmorphism) ---
+    if (currentY > 240) doc.addPage();
+
+    // Fundo muito claro com borda fina (Efeito elegante)
+    doc.setDrawColor(...primaryDark);
+    doc.setLineWidth(0.1);
+    doc.setFillColor(250, 250, 250); // Quase branco
+    doc.roundedRect(20, currentY, 170, 30, 2, 2, 'FD');
+
+    // Linha de detalhe teal lateral
+    doc.setFillColor(...primaryTeal);
+    doc.rect(20, currentY, 2, 30, 'F');
+
+    const totalValue = itemsArray.reduce((sum, item) => sum + item.total, 0);
+    const count = itemsArray.length;
+
+    doc.setFontSize(9);
+    doc.setTextColor(100);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Resumo da Compra: ${count} itens registrados`, 30, currentY + 12);
+
+    doc.setFontSize(18);
+    doc.setTextColor(...dangerRed);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`TOTAL: R$ ${totalValue.toFixed(2).replace('.', ',')}`, 180, currentY + 20, { align: 'right' });
+
+    // Rodapé refinado
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(7);
+        doc.setTextColor(150); // Mais legível
+        doc.setFont('helvetica', 'italic');
+        // Alinhamento centralizado para o texto legal e direita para página
+        doc.text('Este documento é um registro de aprendizagem de Rafael Nunes. Desenvolvido com carinho e auxílio de IA.', 105, 288, { align: 'center' });
+        doc.text(`Página ${i} de ${pageCount}`, 192, 288, { align: 'right' });
+    }
+
+    doc.save(`Market-List-${today.replace(/\//g, '-')}.pdf`);
+    showNotification('PDF gerado com sucesso!', 'success');
+}
+
 // ===== Initialization =====
 
 document.addEventListener('DOMContentLoaded', function () {

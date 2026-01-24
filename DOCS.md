@@ -28,9 +28,12 @@
 ```javascript
 {
     name: string,      // Nome do produto (ex: "Arroz Integral")
+    type: string,      // "unit" ou "weight"
     quantity: number,  // Quantidade (1-100)
-    price: number,     // Valor unitário em decimal (ex: 4.50)
-    total: number      // Subtotal calculado (quantity * price)
+    price: number,     // Valor unitário (apenas se type="unit")
+    pricePerKg: number,// Valor por Kg (apenas se type="weight")
+    weight: number,    // Peso decimal (apenas se type="weight")
+    total: number      // Subtotal calculado
 }
 ```
 
@@ -107,14 +110,17 @@ let itemsArray = [
 | ID | Elemento | Descrição |
 |----|----------|-----------|
 | `market-list-form` | form | Formulário de entrada |
-| `item-name` | input | Campo nome do item |
-| `item-quantity` | select | Seletor de quantidade |
-| `item-price` | input | Campo de valor |
+| `mode-unit-btn`/`mode-weight-btn` | button | Alternadores de modo de entrada |
+| `item-name`/`item-name-weight` | input | Campos nome do item |
+| `item-quantity`/`-weight` | select | Seletors de quantidade |
+| `item-price`/`item-price-kg` | input | Campos de valor (moeda) |
+| `item-weight` | input | Campo de peso (Kg) |
 | `add-item-button` | button | Botão adicionar |
-| `update-item-button` | button | Botão atualizar (hidden por padrão) |
+| `update-item-button` | button | Botão atualizar |
 | `search-input` | input | Campo de busca |
 | `item-list` | div | Container dos cards |
 | `total-value` | span | Exibe valor total |
+| `export-pdf-button` | button | Botão para gerar PDF |
 
 ---
 
@@ -326,6 +332,12 @@ function escapeHtml(text) {
 ---
 
 ## Changelog
+
+### [2.3.0] - 2026-01-24
+- Suporte a itens por Peso (Kg) com botões de modo
+- Geração de PDF profissional com jsPDF e AutoTable
+- Design System do PDF sincronizado com as variáveis CSS
+- Grid Layout 3-colunas no header da lista
 
 ### [2.0.1] - 2026-01-24
 - Layout do section-header centralizado

@@ -333,10 +333,28 @@ main {
 }
 
 .section-header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     margin-bottom: 2rem;
+    gap: 1.5rem;
+}
+
+.section-header h2 {
+    grid-column: 2;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.list-actions {
+    grid-column: 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     gap: 1rem;
 }
 
@@ -378,13 +396,7 @@ main {
     color: var(--primary-teal);
 }
 
-.section-header h2 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin: 0;
-    text-align: center;
-}
+
 
 .search-box {
     display: flex;
@@ -429,6 +441,40 @@ main {
 
 .search-input-wrapper input::placeholder {
     color: #aaa;
+}
+
+.list-actions {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.export-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    background-color: var(--primary-teal);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 42px;
+    /* Mesma altura que o input de busca (aprox) */
+}
+
+.export-btn:hover {
+    background-color: var(--primary-teal-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(32, 166, 154, 0.3);
+}
+
+.pdf-icon {
+    width: 20px;
+    height: 20px;
 }
 
 /* ===== Item List ===== */
@@ -736,14 +782,17 @@ main {
 
     /* Section Header */
     .section-header {
+        display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1rem;
+        gap: 1.25rem;
     }
 
     .section-header h2 {
         order: 1;
-        font-size: 1.2rem;
+        font-size: 1.25rem;
+        white-space: normal;
+        white-space: initial;
     }
 
     .total-inline {
@@ -767,13 +816,29 @@ main {
         font-size: 1.3rem;
     }
 
-    .search-box {
+    .list-actions {
         order: 3;
+        flex-direction: column;
+        width: 100%;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .search-input-wrapper {
         width: 100%;
     }
 
     .search-input-wrapper input {
         width: 100%;
+    }
+
+    .export-btn {
+        width: 100%;
+        justify-content: center;
     }
 
     /* Item List */
