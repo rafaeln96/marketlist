@@ -71,8 +71,18 @@ let itemsArray = [
                                  → scrollTo(top)
 
 [Botão Atualizar] → updateItem() → itemsArray[index] = {...}
-                                 → saveToLocalStorage()
-                                 → toggleFormButtons(false)
+### Remover Item
+    
+```
+[Botão Remover] → removeItem(index) → pendingRemovalIndex = index
+                                    → modal.style.display = 'flex'
+    
+[Modal: Confirmar] → confirmRemoval() → itemsArray.splice()
+                                      → saveToLocalStorage()
+                                      → closeModal()
+                                      → showNotification()
+                                      
+[Modal: Cancelar] → closeModal() → Oculta modal
 ```
 
 ### Buscar Item
@@ -97,9 +107,14 @@ let itemsArray = [
     
     <main>
         <section class="market-list-section">   <!-- Formulário -->
+    <main>
+        <section class="market-list-section">   <!-- Formulário -->
         <section class="item-display-section">  <!-- Lista de itens -->
         <section class="total-display-section"> <!-- Total -->
     </main>
+
+    <!-- Modal de Confirmação -->
+    <div id="confirmation-modal">...</div>
     
     <script src="assets/js/script.js"></script>
 </body>
@@ -332,6 +347,11 @@ function escapeHtml(text) {
 ---
 
 ## Changelog
+
+### [2.3.1] - 2026-01-24
+- 🐛 Fix: Posicionamento do pop-up de notificação em dispositivos móveis corrigido para o topo da tela.
+- ✨ Feat: Substituição do `confirm()` nativo por um Modal de Confirmação Personalizado estilizado.
+- 📱 Fix: Ajuste de regras CSS conflitantes que esticavam notificações no mobile.
 
 ### [2.3.0] - 2026-01-24
 - Suporte a itens por Peso (Kg) com botões de modo

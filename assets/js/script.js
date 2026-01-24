@@ -338,19 +338,49 @@ function updateItem(event) {
 }
 
 // Remove um item da lista (com confirmação)
-function removeItem(index) {
-    const itemName = itemsArray[index].name;
+// Variável para armazenar o índice do item a ser removido
+let pendingRemovalIndex = null;
 
-    // Mostra caixa de confirmação
-    if (!confirm(`Tem certeza que deseja remover "${itemName}" da lista?`)) {
-        return; // Usuário cancelou
-    }
+// Remove um item da lista (abre modal de confirmação)
+function removeItem(index) {
+    pendingRemovalIndex = index;
+    const modal = document.getElementById('confirmation-modal');
+    modal.style.display = 'flex';
+    // Pequeno delay para ativar a animação de entrada
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 10);
+}
+
+// Fecha o modal de confirmação
+function closeModal() {
+    const modal = document.getElementById('confirmation-modal');
+    modal.classList.remove('active');
+    // Aguarda a animação terminar antes de esconder
+    setTimeout(() => {
+        modal.style.display = 'none';
+        pendingRemovalIndex = null;
+    }, 300);
+}
+
+// Confirma a remoção e executa a exclusão
+function confirmRemoval() {
+    if (pendingRemovalIndex === null) return;
+
+    const index = pendingRemovalIndex;
+    const itemName = itemsArray[index].name;
 
     itemsArray.splice(index, 1);
     saveToLocalStorage();
     updateItemList();
     updateTotalValue();
-    showNotification(`"${itemName}" removido.`, 'error'); // Notificação vermelha
+
+    closeModal();
+
+    // Mostra a notificação
+    setTimeout(() => {
+        showNotification(`"${itemName}" removido.`, 'error');
+    }, 350);
 }
 
 // Carrega os dados de um item no formulário para edição
@@ -711,4 +741,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('market-list-form').addEventListener('submit', addItem);
     document.getElementById('update-item-button').addEventListener('click', updateItem);
     document.getElementById('cancel-edit-button').addEventListener('click', cancelEdit);
+
+    // Fechar modal ao clicar fora dele
+    document.getElementById('confirmation-modal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
 });

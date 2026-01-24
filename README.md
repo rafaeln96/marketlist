@@ -92,7 +92,7 @@ marketlist-main/
 
 ### 3. Remover Itens
 - Remove item do array e localStorage
-- Notificação de confirmação (confirm)
+- **Modal Personalizado**: Confirmação visual elegante (sem alertas nativos)
 
 ### 4. Exportação PDF
 - **Design Premium**: Cores do site e efeito glassmorphism
@@ -203,6 +203,11 @@ O projeto está configurado para deploy automático via GitHub Pages:
 ---
 
 ## 🔄 Histórico de Atualizações
+
+### v2.3.1 (24/01/2026)
+- ✨ **Modal de Confirmação Personalizado**: Substituição dos alertas nativos por modais modernos (glassmorphism)
+- 🐛 **Correção Mobile**: Ajuste no posicionamento das notificações toast em telas pequenas
+- 📱 Melhoria na experiência de exclusão de itens
 
 ### v2.3.0 (24/01/2026)
 - ✨ **Suporte a itens por Peso (Kg)** com cálculo dinâmico
