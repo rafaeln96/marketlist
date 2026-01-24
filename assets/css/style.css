@@ -190,11 +190,53 @@ main {
     margin-bottom: 1.5rem;
 }
 
+/* ===== Mode Toggle ===== */
+.mode-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.mode-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: var(--bg-white);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mode-btn:hover {
+    border-color: var(--primary-teal);
+    color: var(--primary-teal);
+}
+
+.mode-btn.active {
+    background-color: var(--primary-teal);
+    border-color: var(--primary-teal);
+    color: var(--bg-white);
+}
+
+.mode-btn svg {
+    flex-shrink: 0;
+}
+
 .form-row {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
     gap: 1.5rem;
     margin-bottom: 1.5rem;
+}
+
+.form-row-4 {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
 }
 
 .form-group {
@@ -654,8 +696,22 @@ main {
         font-size: 1.2rem;
     }
 
+    /* Mode Toggle Mobile */
+    .mode-toggle {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .mode-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+    }
+
     /* Formulário */
-    .form-row {
+    .form-row,
+    .form-row-4 {
         grid-template-columns: 1fr;
         gap: 0.75rem;
     }
