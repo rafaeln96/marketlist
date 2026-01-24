@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <title>Market List</title>
+</head>
+
+<body>
+    <header>
+        <nav class="nav-bar">
+            <div class="logo">
+                <svg class="cart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M7 18C5.9 18 5 18.9 5 20S5.9 22 7 22 9 21.1 9 20 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5.48C20.96 5.34 21 5.17 21 5C21 4.45 20.55 4 20 4H5.21L4.27 2H1ZM17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"
+                        fill="currentColor" />
+                </svg>
+                <h1>MARKET LIST</h1>
+            </div>
+
+            <div class="nav-list">
+                <ul>
+                    <li class="nav-item"><a href="index.html" class="nav-link active">Início</a></li>
+                    <li class="nav-item"><a href="calculadora.html" class="nav-link">Calculadora</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Sobre</a></li>
+                </ul>
+            </div>
+
+            <div class="login-button">
+                <button><a href="#">Entrar</a></button>
+            </div>
+
+            <div class="mobile-menu-icon">
+                <button onclick="menuShow()">
+                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z" fill="currentColor" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <div class="mobile-menu">
+            <ul>
+                <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
+                <li class="nav-item"><a href="calculadora.html" class="nav-link">Calculadora</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Sobre</a></li>
+            </ul>
+
+            <div class="login-button">
+                <button><a href="#">Entrar</a></button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="market-list-section">
+            <h2>Adicionar Item à Lista de Mercado</h2>
+            <form id="market-list-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="item-name">Nome do Item</label>
+                        <input type="text" id="item-name" name="item-name" required placeholder="Ex: Leite Integral">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="item-quantity">Quantidade</label>
+                        <select id="item-quantity" name="item-quantity" required>
+                            <option value="" disabled selected>Selecione</option>
+                            <!-- As opções de 1 a 100 serão geradas via JavaScript -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="item-price">Valor Unitário (R$)</label>
+                        <input type="text" id="item-price" name="item-price" required placeholder="Ex: 5,50"
+                            oninput="formatarMoeda(this)">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="add-item-button" type="submit">Adicionar Item</button>
+                    <button id="update-item-button" type="button" style="display: none;">Atualizar Item</button>
+                    <button id="cancel-edit-button" type="button" style="display: none;">Cancelar</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="item-display-section">
+            <div class="section-header">
+                <div class="total-inline">
+                    <div class="total-info">
+                        <span class="total-label">TOTAL:</span>
+                        <span id="total-value">R$ 0,00</span>
+                    </div>
+                    <div class="items-count">
+                        <span id="items-count">0</span> itens
+                    </div>
+                </div>
+                <h2>Itens Adicionados</h2>
+                <div class="search-box">
+                    <label for="search-input">Buscar Itens</label>
+                    <div class="search-input-wrapper">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" id="search-input" placeholder="Pesquisar por nome..."
+                            oninput="searchItems(this.value)">
+                    </div>
+                </div>
+            </div>
+            <div id="item-list"></div>
+        </section>
+    </main>
+
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>

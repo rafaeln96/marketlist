@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <title>Calculadora - Market List</title>
+</head>
+
+<body>
+    <header>
+        <nav class="nav-bar">
+            <div class="logo">
+                <svg class="cart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M7 18C5.9 18 5 18.9 5 20S5.9 22 7 22 9 21.1 9 20 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5.48C20.96 5.34 21 5.17 21 5C21 4.45 20.55 4 20 4H5.21L4.27 2H1ZM17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"
+                        fill="currentColor" />
+                </svg>
+                <h1>MARKET LIST</h1>
+            </div>
+
+            <div class="nav-list">
+                <ul>
+                    <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
+                    <li class="nav-item"><a href="calculadora.html" class="nav-link active">Calculadora</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Sobre</a></li>
+                </ul>
+            </div>
+
+            <div class="login-button">
+                <button><a href="#">Entrar</a></button>
+            </div>
+
+            <div class="mobile-menu-icon">
+                <button onclick="menuShow()">
+                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z" fill="currentColor" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <div class="mobile-menu">
+            <ul>
+                <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
+                <li class="nav-item"><a href="calculadora.html" class="nav-link">Calculadora</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Sobre</a></li>
+            </ul>
+
+            <div class="login-button">
+                <button><a href="#">Entrar</a></button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="calculator-section">
+            <h2>Calculadora</h2>
+            <div class="calculator">
+                <div class="calculator-display">
+                    <div class="calculator-expression" id="calc-expression"></div>
+                    <div class="calculator-result" id="calc-result">0</div>
+                </div>
+                <div class="calculator-buttons">
+                    <button class="calc-btn calc-clear" onclick="clearCalc()">C</button>
+                    <button class="calc-btn calc-operator" onclick="appendValue('(')">(</button>
+                    <button class="calc-btn calc-operator" onclick="appendValue(')')">)</button>
+                    <button class="calc-btn calc-operator" onclick="appendOperator('/')">÷</button>
+
+                    <button class="calc-btn" onclick="appendValue('7')">7</button>
+                    <button class="calc-btn" onclick="appendValue('8')">8</button>
+                    <button class="calc-btn" onclick="appendValue('9')">9</button>
+                    <button class="calc-btn calc-operator" onclick="appendOperator('*')">×</button>
+
+                    <button class="calc-btn" onclick="appendValue('4')">4</button>
+                    <button class="calc-btn" onclick="appendValue('5')">5</button>
+                    <button class="calc-btn" onclick="appendValue('6')">6</button>
+                    <button class="calc-btn calc-operator" onclick="appendOperator('-')">−</button>
+
+                    <button class="calc-btn" onclick="appendValue('1')">1</button>
+                    <button class="calc-btn" onclick="appendValue('2')">2</button>
+                    <button class="calc-btn" onclick="appendValue('3')">3</button>
+                    <button class="calc-btn calc-operator" onclick="appendOperator('+')">+</button>
+
+                    <button class="calc-btn" onclick="appendValue('0')">0</button>
+                    <button class="calc-btn" onclick="appendValue('.')">.</button>
+                    <button class="calc-btn calc-backspace" onclick="backspace()">⌫</button>
+                    <button class="calc-btn calc-equals" onclick="calculate()">=</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="assets/js/calculadora.js"></script>
+</body>
+
+</html>
