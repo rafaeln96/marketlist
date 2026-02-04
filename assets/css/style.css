@@ -1257,7 +1257,9 @@ main {
     .about-text {
         font-size: 1rem;
     }
-}/* ===== Custom Modal ===== */
+}
+
+/* ===== Custom Modal ===== */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1357,4 +1359,297 @@ main {
     background-color: var(--danger-red-hover);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+/* ===== Lista Rápida Styles ===== */
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    margin-top: -0.5rem;
+}
+
+.quick-form-row {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.quick-qty-group {
+    max-width: 100px;
+}
+
+.quick-qty-group input {
+    text-align: center;
+}
+
+#add-quick-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--primary-teal);
+    color: var(--bg-white);
+    width: 100%;
+}
+
+#add-quick-btn:hover {
+    background-color: var(--primary-teal-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(32, 166, 154, 0.3);
+}
+
+.quick-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.quick-section-header h2 {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.quick-items-counter {
+    background: var(--primary-teal);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.quick-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.clear-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    border: 2px solid var(--danger-red);
+    color: var(--danger-red);
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clear-all-btn:hover {
+    background: var(--danger-red);
+    color: white;
+}
+
+.quick-list-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 200px;
+}
+
+/* Single Container - Nota Fiscal Style */
+.quick-list-container {
+    background-color: var(--bg-white);
+    border: 3px solid var(--accent-gold);
+    border-radius: 8px;
+    padding: 0;
+    position: relative;
+    box-shadow: 0 4px 15px var(--shadow-light);
+    min-height: 200px;
+}
+
+/* Zigzag effect on left edge */
+.quick-list-container::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: 0;
+    bottom: 0;
+    width: 12px;
+    background: linear-gradient(135deg, var(--accent-gold) 25%, transparent 25%) 0 0,
+        linear-gradient(225deg, var(--accent-gold) 25%, transparent 25%) 0 0,
+        linear-gradient(315deg, var(--bg-light) 25%, transparent 25%) 0 6px,
+        linear-gradient(45deg, var(--bg-light) 25%, transparent 25%) 0 6px;
+    background-size: 12px 12px;
+}
+
+.quick-list-inner {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Quick Item Row (inside container) */
+.quick-item {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px dashed #ddd;
+    border-radius: 0;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    position: relative;
+    box-shadow: none;
+    transition: background-color 0.2s ease;
+}
+
+.quick-item:last-child {
+    border-bottom: none;
+}
+
+.quick-item:hover {
+    background-color: transparent;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Remove the old zigzag from individual items */
+.quick-item::before {
+    display: none;
+}
+
+.quick-item-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.quick-item-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+.quick-item-qty {
+    background: var(--primary-teal);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-width: 50px;
+    text-align: center;
+}
+
+.quick-item-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.quick-action-btn {
+    background: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-check-btn {
+    border-color: var(--success-green);
+    color: var(--success-green);
+}
+
+.quick-check-btn:hover {
+    background: var(--success-green);
+    color: white;
+}
+
+.quick-remove-btn {
+    border-color: var(--danger-red);
+    color: var(--danger-red);
+}
+
+.quick-remove-btn:hover {
+    background: var(--danger-red);
+    color: white;
+}
+
+/* Checked State - Red Strikethrough */
+.quick-item.checked {
+    opacity: 0.7;
+    background: #fefefe;
+}
+
+.quick-item.checked .quick-item-name {
+    text-decoration: line-through;
+    text-decoration-color: var(--danger-red);
+    text-decoration-thickness: 2px;
+    color: var(--danger-red);
+}
+
+.quick-item.checked .quick-check-btn {
+    background: var(--success-green);
+    color: white;
+}
+
+/* Empty State */
+.quick-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.quick-empty-state svg {
+    width: 64px;
+    height: 64px;
+    color: #ddd;
+    margin-bottom: 1rem;
+}
+
+.quick-empty-state p {
+    font-size: 1rem;
+}
+
+/* Weight input group */
+.quick-weight-group {
+    max-width: 120px;
+}
+
+.quick-weight-group input {
+    text-align: center;
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 730px) {
+    .quick-form-row {
+        grid-template-columns: 1fr 80px;
+    }
+
+    .quick-section-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+    }
+
+    .quick-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .quick-item-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
 }

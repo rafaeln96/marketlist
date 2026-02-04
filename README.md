@@ -2,7 +2,7 @@
 
 Uma aplicação web para gerenciamento de lista de compras de mercado, desenvolvida com HTML, CSS e JavaScript puros.
 
-> **Última atualização:** 24 de Janeiro de 2026
+> **Última atualização:** 03 de Fevereiro de 2026
 
 ---
 
@@ -33,10 +33,10 @@ O **Market List** é uma aplicação web que permite aos usuários criar e geren
 - ✅ Notificações visuais de feedback
 - ✨ Validação de duplicidade de itens (case-insensitive)
 - ✨ Contador de itens ao lado do total
-- ✨ Efeito glassmorphism na calculadora
 - 📦 **Suporte a itens por Peso (Kg)**
 - 📄 **Exportação PDF Profissional** com agrupamento inteligente
 - 📱 Responsividade 100% para dispositivos móveis
+- 🆕 **Lista Rápida**: Adicione itens rapidamente durante as compras
 
 ---
 
@@ -59,8 +59,8 @@ O **Market List** é uma aplicação web que permite aos usuários criar e geren
 
 ```
 marketlist-main/
-├── index.html              # Página principal da aplicação
-├── calculadora.html        # Página da calculadora
+├── index.html              # Página principal (lista de compras)
+├── lista-rapida.html       # Página da lista rápida
 ├── sobre.html              # Página sobre o projeto
 ├── README.md               # Esta documentação
 ├── DOCS.md                 # Documentação técnica detalhada
@@ -69,7 +69,7 @@ marketlist-main/
     │   └── style.css       # Estilos da aplicação
     ├── js/
     │   ├── script.js       # Lógica da lista de compras
-    │   └── calculadora.js  # Lógica da calculadora
+    │   └── lista-rapida.js # Lógica da lista rápida
     └── img/
         └── (ícones legados)
 ```

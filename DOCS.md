@@ -348,6 +348,16 @@ function escapeHtml(text) {
 
 ## Changelog
 
+### [3.0.0] - 2026-02-03
+- 🆕 Feat: Nova página **Lista Rápida** (`lista-rapida.html`) para adicionar itens rapidamente durante as compras
+- 🆕 Feat: Suporte a itens por Unidade ou Peso (Kg) na Lista Rápida
+- 🆕 Feat: Itens exibidos em container estilo "nota fiscal" com ordenação alfabética
+- 🆕 Feat: Marcar items como "pego" (riscado em vermelho)
+- 🆕 Feat: Botão "Limpar Tudo" com modal de confirmação
+- 🆕 Feat: Persistência via localStorage
+- 🗑️ Removed: Página da Calculadora substituída por Lista Rápida
+- 🗑️ Removed: Botão "Entrar" removido de todas as páginas
+
 ### [2.3.1] - 2026-01-24
 - 🐛 Fix: Posicionamento do pop-up de notificação em dispositivos móveis corrigido para o topo da tela.
 - ✨ Feat: Substituição do `confirm()` nativo por um Modal de Confirmação Personalizado estilizado.
