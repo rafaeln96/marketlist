@@ -348,6 +348,12 @@ function escapeHtml(text) {
 
 ## Changelog
 
+### [3.0.1] - 2026-02-03
+- 🎨 Feat: Header redesenhado - logo alinhado à esquerda, navegação centralizada
+- 📱 Fix: Layout mobile do hamburger menu restaurado (à direita)
+- 📱 Fix: Botões de ação alinhados com texto dos itens no mobile
+- 📱 Fix: Título "Sua Lista" centralizado no mobile
+
 ### [3.0.0] - 2026-02-03
 - 🆕 Feat: Nova página **Lista Rápida** (`lista-rapida.html`) para adicionar itens rapidamente durante as compras
 - 🆕 Feat: Suporte a itens por Unidade ou Peso (Kg) na Lista Rápida
