@@ -127,7 +127,7 @@ let itemsArray = [
 | `market-list-form` | form | Formulário de entrada |
 | `mode-unit-btn`/`mode-weight-btn` | button | Alternadores de modo de entrada |
 | `item-name`/`item-name-weight` | input | Campos nome do item |
-| `item-quantity`/`-weight` | select | Seletors de quantidade |
+| `item-quantity`/`-weight` | input | Campos de quantidade (numérico) |
 | `item-price`/`item-price-kg` | input | Campos de valor (moeda) |
 | `item-weight` | input | Campo de peso (Kg) |
 | `add-item-button` | button | Botão adicionar |
@@ -197,24 +197,18 @@ let itemsArray = [
 
 ---
 
-## Funções JavaScript Detalhadas
-
-### populateQuantityOptions()
+### Campo de Quantidade
 
 ```javascript
-// Gera opções 1-100 no select de quantidade
-// Chamada: DOMContentLoaded
-// Modifica: #item-quantity
-function populateQuantityOptions() {
-    const quantitySelect = document.getElementById('item-quantity');
-    for (let i = 1; i <= 100; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = i;
-        quantitySelect.appendChild(option);
-    }
-}
+// O campo de quantidade agora usa <input type="number"> com valor padrão 1
+// Permite entrada livre de quantidade pelo usuário
+<input type="number" id="item-quantity" value="1" min="1">
+
+// Após adicionar ou atualizar item, o campo é resetado para '1'
+document.getElementById('item-quantity').value = '1';
 ```
+
+> **Nota:** A função `populateQuantityOptions()` foi removida pois não é mais necessária com o uso de input numérico.
 
 ### formatarMoeda(input)
 
@@ -276,7 +270,6 @@ function updateItemList() {
 
 ```javascript
 document.addEventListener('DOMContentLoaded', function() {
-    populateQuantityOptions();  // Preenche select
     loadFromLocalStorage();      // Carrega dados salvos
     
     // Event listeners
@@ -347,6 +340,14 @@ function escapeHtml(text) {
 ---
 
 ## Changelog
+
+### [3.0.2] - 2026-02-04
+- 🔧 Fix: Campo "Qtd" da Lista Rápida agora empilha corretamente abaixo do nome em mobile
+- 📱 Fix: Adicionado breakpoint para tablets (iPad Air ~820px) com layout responsivo
+- 📐 Fix: Container da lista agora cresce dinamicamente com os itens (removido min-height fixo)
+- 🔄 Refactor: Campo de quantidade na página inicial alterado de dropdown (select) para input numérico livre
+- 🌍 i18n: Todos os comentários do código traduzidos de inglês para português
+- 🎴 Clean: Removida função `populateQuantityOptions()` obsoleta
 
 ### [3.0.1] - 2026-02-03
 - 🎨 Feat: Header redesenhado - logo alinhado à esquerda, navegação centralizada

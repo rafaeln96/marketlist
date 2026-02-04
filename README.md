@@ -2,7 +2,7 @@
 
 Uma aplicação web para gerenciamento de lista de compras de mercado, desenvolvida com HTML, CSS e JavaScript puros.
 
-> **Última atualização:** 03 de Fevereiro de 2026
+> **Última atualização:** 04 de Fevereiro de 2026
 
 ---
 
@@ -82,7 +82,7 @@ marketlist-main/
 
 ### 1. Adicionar Itens
 - **Modos**: Unidade ou Peso (Kg)
-- Campos: Nome, Qtd (1-100), Preço Un/Kg, Peso (se modo peso)
+- Campos: Nome, Qtd (entrada livre), Preço Un/Kg, Peso (se modo peso)
 - Formatação automática de moeda (R$) e peso (0,000)
 
 ### 2. Editar Itens
@@ -151,9 +151,9 @@ marketlist-main/
 
 | Função | Descrição |
 |--------|-----------|
-| `populateQuantityOptions()` | Gera opções 1-100 no select de quantidade |
 | `parseMoeda(valor)` | Converte string formatada ("1.234,56") para número |
 | `formatarMoeda(input)` | Formata input para padrão BRL durante digitação |
+| `formatarPeso(input)` | Formata campo de peso para 3 casas decimais |
 | `escapeHtml(text)` | Previne XSS escapando caracteres HTML |
 
 ### CRUD
@@ -203,6 +203,14 @@ O projeto está configurado para deploy automático via GitHub Pages:
 ---
 
 ## 🔄 Histórico de Atualizações
+
+### v3.0.2 (04/02/2026)
+- 🔧 **Campo de Quantidade Livre**: Alterado de dropdown (1-100) para input numérico com entrada livre
+- 📱 **Correção Responsiva**: Campo "Qtd" da Lista Rápida agora empilha corretamente abaixo do nome em dispositivos móveis
+- 📱 **Suporte a Tablets**: Adicionado breakpoint para iPad Air (~820px) com layout otimizado
+- 📐 **Lista Dinâmica**: Container da lista agora cresce automaticamente conforme itens são adicionados
+- 🌍 **Tradução de Comentários**: Todos os comentários do código traduzidos de inglês para português
+- 🧹 Limpeza de código obsoleto (removida função `populateQuantityOptions()`)
 
 ### v2.3.1 (24/01/2026)
 - ✨ **Modal de Confirmação Personalizado**: Substituição dos alertas nativos por modais modernos (glassmorphism)

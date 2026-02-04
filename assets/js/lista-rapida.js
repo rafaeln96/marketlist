@@ -1,6 +1,6 @@
-// ===== Lista Rápida State =====
+// ===== Estado da Lista Rápida =====
 let quickItems = [];
-let currentMode = 'qty'; // 'qty' or 'weight'
+let currentMode = 'qty'; // 'qty' ou 'weight'
 let pendingRemovalIndex = null;
 
 // ===== LocalStorage =====
@@ -16,7 +16,7 @@ function loadQuickList() {
     renderQuickList();
 }
 
-// ===== Mode Toggle =====
+// ===== Alternador de Modo =====
 function setQuickMode(mode) {
     currentMode = mode;
 
@@ -38,7 +38,7 @@ function setQuickMode(mode) {
     }
 }
 
-// ===== CRUD Operations =====
+// ===== Operações CRUD =====
 
 function addQuickItem(e) {
     e.preventDefault();
@@ -60,7 +60,7 @@ function addQuickItem(e) {
             return;
         }
 
-        // Check for duplicates
+        // Verifica duplicatas
         if (quickItems.some(item => item.name.toLowerCase() === name.toLowerCase() && !item.checked)) {
             showNotification(`"${name}" já está na lista!`, 'error');
             return;
@@ -73,7 +73,7 @@ function addQuickItem(e) {
             checked: false
         });
 
-        // Clear inputs
+        // Limpa os campos
         nameInput.value = '';
         qtyInput.value = '1';
         nameInput.focus();
@@ -98,11 +98,11 @@ function addQuickItem(e) {
             return;
         }
 
-        // Format weight display
+        // Formata a exibição do peso
         displayQty = `${weightKg.toFixed(3).replace('.', ',')}kg`;
         type = 'weight';
 
-        // Check for duplicates
+        // Verifica duplicatas
         if (quickItems.some(item => item.name.toLowerCase() === name.toLowerCase() && !item.checked)) {
             showNotification(`"${name}" já está na lista!`, 'error');
             return;
@@ -115,7 +115,7 @@ function addQuickItem(e) {
             checked: false
         });
 
-        // Clear inputs
+        // Limpa os campos
         nameInput.value = '';
         weightInput.value = '';
         nameInput.focus();
@@ -132,8 +132,8 @@ function toggleChecked(index) {
     renderQuickList();
 }
 
-// ===== Modal Actions =====
-let modalAction = 'remove'; // 'remove' or 'clearAll'
+// ===== Ações do Modal =====
+let modalAction = 'remove'; // 'remove' ou 'clearAll'
 
 function requestRemoval(index) {
     pendingRemovalIndex = index;
@@ -181,7 +181,7 @@ function confirmAction() {
     }
 }
 
-// ===== Weight Formatting =====
+// ===== Formatação de Peso =====
 function formatarPesoKg(input) {
     let valor = input.value.replace(/[^\d]/g, '');
     if (valor.length === 0) {
@@ -192,7 +192,7 @@ function formatarPesoKg(input) {
     input.value = decimal.replace('.', ',');
 }
 
-// ===== Render =====
+// ===== Renderização =====
 
 function renderQuickList() {
     const listContainer = document.getElementById('quick-list');
@@ -203,7 +203,7 @@ function renderQuickList() {
     listContainer.innerHTML = '';
     countElement.textContent = quickItems.length;
 
-    // Show/hide clear all button
+    // Mostra/oculta botão limpar tudo
     if (clearAllBtn) {
         clearAllBtn.style.display = quickItems.length > 0 ? 'flex' : 'none';
     }
@@ -218,7 +218,7 @@ function renderQuickList() {
                 <p>Sua lista está vazia.<br>Adicione itens acima!</p>
             </div>
         `;
-        // Move empty state outside the container
+        // Move estado vazio para fora do container
         const section = containerWrapper.parentElement;
         const emptyState = listContainer.innerHTML;
         listContainer.innerHTML = '';
@@ -226,19 +226,19 @@ function renderQuickList() {
         return;
     }
 
-    // Remove any existing empty state outside container
+    // Remove qualquer estado vazio existente fora do container
     const existingEmpty = containerWrapper.parentElement.querySelector('.quick-empty-state');
     if (existingEmpty) existingEmpty.remove();
 
     containerWrapper.style.display = 'block';
 
-    // Sort items alphabetically by name
+    // Ordena itens alfabeticamente por nome
     const sortedItems = [...quickItems].sort((a, b) =>
         a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' })
     );
 
     sortedItems.forEach((item) => {
-        // Find the original index for proper toggle/removal
+        // Encontra o índice original para toggle/remoção correta
         const originalIndex = quickItems.indexOf(item);
         const itemDiv = document.createElement('div');
         itemDiv.className = `quick-item ${item.checked ? 'checked' : ''}`;
@@ -266,7 +266,7 @@ function renderQuickList() {
     });
 }
 
-// ===== Utility Functions =====
+// ===== Funções Utilitárias =====
 
 function escapeHtml(text) {
     const div = document.createElement('div');
@@ -274,7 +274,7 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// ===== Notification System =====
+// ===== Sistema de Notificações =====
 
 function showNotification(message, type = 'info') {
     const existing = document.querySelector('.notification');
@@ -315,7 +315,7 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Notification animations
+// Animações de notificação
 const notificationStyles = document.createElement('style');
 notificationStyles.textContent = `
     @keyframes slideInTop {
@@ -336,14 +336,14 @@ function menuShow() {
     mobileMenu.classList.toggle('open');
 }
 
-// ===== Initialization =====
+// ===== Inicialização =====
 
 document.addEventListener('DOMContentLoaded', function () {
     loadQuickList();
 
     document.getElementById('quick-list-form').addEventListener('submit', addQuickItem);
 
-    // Enter key on fields submits form
+    // Tecla Enter nos campos envia o formulário
     document.getElementById('quick-item-qty').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Close modal on overlay click
+    // Fecha modal ao clicar no overlay
     document.getElementById('confirmation-modal').addEventListener('click', function (e) {
         if (e.target === this) {
             closeModal();

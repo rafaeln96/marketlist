@@ -4,7 +4,7 @@ let previousScrollPosition = 0; // Variável para armazenar a posição anterior
 let searchQuery = ''; // Query de busca atual
 let currentMode = 'unit'; // Modo atual do formulário: 'unit' ou 'weight'
 
-// ===== Form Mode Functions =====
+// ===== Funções de Modo do Formulário =====
 
 // Alterna entre modo unidade e modo peso
 // skipCancelEdit: quando true, não cancela edição em andamento (usado ao carregar item para edição)
@@ -23,7 +23,7 @@ function setFormMode(mode, skipCancelEdit = false) {
         weightBtn.classList.remove('active');
         // Limpa campos do modo peso
         document.getElementById('item-name-weight').value = '';
-        document.getElementById('item-quantity-weight').value = '';
+        document.getElementById('item-quantity-weight').value = '1';
         document.getElementById('item-price-kg').value = '';
         document.getElementById('item-weight').value = '';
     } else {
@@ -33,7 +33,7 @@ function setFormMode(mode, skipCancelEdit = false) {
         weightBtn.classList.add('active');
         // Limpa campos do modo unidade
         document.getElementById('item-name').value = '';
-        document.getElementById('item-quantity').value = '';
+        document.getElementById('item-quantity').value = '1';
         document.getElementById('item-price').value = '';
     }
 
@@ -63,7 +63,7 @@ function parsePeso(valorFormatado) {
     return parseFloat(valorFormatado.replace(/\./g, '').replace(',', '.'));
 }
 
-// ===== LocalStorage Functions =====
+// ===== Funções de LocalStorage =====
 
 // Salva os itens no localStorage
 function saveToLocalStorage() {
@@ -81,23 +81,10 @@ function loadFromLocalStorage() {
     updateTotalValue();
 }
 
-// ===== Utility Functions =====
+// ===== Funções Utilitárias =====
 
-// Gera opções para os seletores de quantidade (1 a 100)
-function populateQuantityOptions() {
-    const quantitySelect = document.getElementById('item-quantity');
-    const quantitySelectWeight = document.getElementById('item-quantity-weight');
-
-    for (let i = 1; i <= 100; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = i;
-        quantitySelect.appendChild(option);
-
-        // Clone para o select de peso
-        quantitySelectWeight.appendChild(option.cloneNode(true));
-    }
-}
+// Nota: Campos de quantidade agora usam <input type="number"> ao invés de <select>,
+// então populateQuantityOptions não é mais necessário
 
 // Converte o valor formatado (ex.: 1.234,56) para um número decimal
 function parseMoeda(valorFormatado) {
@@ -147,7 +134,7 @@ function cancelEdit() {
     showNotification('Edição cancelada.', 'info');
 }
 
-// ===== Search Function =====
+// ===== Função de Busca =====
 
 // Filtra itens por nome
 function searchItems(query) {
@@ -155,7 +142,7 @@ function searchItems(query) {
     updateItemList();
 }
 
-// ===== CRUD Operations =====
+// ===== Operações CRUD =====
 
 // Adiciona um item à lista
 function addItem(event) {
@@ -230,11 +217,11 @@ function addItem(event) {
     // Limpa os campos do modo atual
     if (currentMode === 'unit') {
         document.getElementById('item-name').value = '';
-        document.getElementById('item-quantity').value = '';
+        document.getElementById('item-quantity').value = '1';
         document.getElementById('item-price').value = '';
     } else {
         document.getElementById('item-name-weight').value = '';
-        document.getElementById('item-quantity-weight').value = '';
+        document.getElementById('item-quantity-weight').value = '1';
         document.getElementById('item-price-kg').value = '';
         document.getElementById('item-weight').value = '';
     }
@@ -316,12 +303,12 @@ function updateItem(event) {
     // Limpa campos apropriados
     if (editingItem.type === 'weight') {
         document.getElementById('item-name-weight').value = '';
-        document.getElementById('item-quantity-weight').value = '';
+        document.getElementById('item-quantity-weight').value = '1';
         document.getElementById('item-price-kg').value = '';
         document.getElementById('item-weight').value = '';
     } else {
         document.getElementById('item-name').value = '';
-        document.getElementById('item-quantity').value = '';
+        document.getElementById('item-quantity').value = '1';
         document.getElementById('item-price').value = '';
     }
 
@@ -422,7 +409,7 @@ function editItem(index) {
     });
 }
 
-// ===== Display Functions =====
+// ===== Funções de Exibição =====
 
 // Atualiza a lista de itens e organiza em ordem alfabética
 function updateItemList() {
@@ -512,7 +499,7 @@ function updateTotalValue() {
     }
 }
 
-// ===== Notification System =====
+// ===== Sistema de Notificações =====
 
 function showNotification(message, type = 'info') {
     // Remove notificação existente se houver
@@ -573,14 +560,14 @@ notificationStyles.textContent = `
 `;
 document.head.appendChild(notificationStyles);
 
-// ===== Mobile Menu =====
+// ===== Menu Mobile =====
 
 function menuShow() {
     const mobileMenu = document.querySelector('.mobile-menu');
     mobileMenu.classList.toggle('open');
 }
 
-// ===== Export Function =====
+// ===== Função de Exportação =====
 
 async function exportToPDF() {
     if (itemsArray.length === 0) {
@@ -733,10 +720,9 @@ async function exportToPDF() {
     showNotification('PDF gerado com sucesso!', 'success');
 }
 
-// ===== Initialization =====
+// ===== Inicialização =====
 
 document.addEventListener('DOMContentLoaded', function () {
-    populateQuantityOptions();
     loadFromLocalStorage();
     document.getElementById('market-list-form').addEventListener('submit', addItem);
     document.getElementById('update-item-button').addEventListener('click', updateItem);

@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-/* ===== CSS Variables ===== */
+/* ===== Variáveis CSS ===== */
 :root {
     --primary-dark: #1a2634;
     --primary-teal: #20a69a;
@@ -19,7 +19,7 @@
     --shadow-medium: rgba(0, 0, 0, 0.15);
 }
 
-/* ===== Reset & Base ===== */
+/* ===== Reset e Base ===== */
 * {
     padding: 0;
     margin: 0;
@@ -32,7 +32,7 @@ body {
     min-height: 100vh;
 }
 
-/* ===== Header & Navigation ===== */
+/* ===== Cabeçalho e Navegação ===== */
 header {
     background-color: var(--primary-dark);
     box-shadow: 0 4px 15px var(--shadow-medium);
@@ -132,7 +132,7 @@ header {
     font-size: 0.95rem;
 }
 
-/* ===== Mobile Menu ===== */
+/* ===== Menu Mobile ===== */
 .mobile-menu-icon {
     display: none;
 }
@@ -175,14 +175,14 @@ header {
     margin-top: 1rem;
 }
 
-/* ===== Main Content ===== */
+/* ===== Conteúdo Principal ===== */
 main {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
 }
 
-/* ===== Form Section ===== */
+/* ===== Seção do Formulário ===== */
 .market-list-section {
     background-color: var(--bg-white);
     border-radius: 12px;
@@ -198,7 +198,7 @@ main {
     margin-bottom: 1.5rem;
 }
 
-/* ===== Mode Toggle ===== */
+/* ===== Alternador de Modo ===== */
 .mode-toggle {
     display: flex;
     justify-content: center;
@@ -331,7 +331,7 @@ main {
     box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
 }
 
-/* ===== Items Display Section ===== */
+/* ===== Seção de Exibição de Itens ===== */
 .item-display-section {
     background-color: var(--bg-white);
     border-radius: 12px;
@@ -485,7 +485,7 @@ main {
     height: 20px;
 }
 
-/* ===== Item List ===== */
+/* ===== Lista de Itens ===== */
 #item-list {
     display: flex;
     flex-direction: row;
@@ -498,12 +498,12 @@ main {
     align-items: stretch;
 }
 
-/* Custom Horizontal Scrollbar */
+/* Barra de rolagem horizontal personalizada */
 #item-list::-webkit-scrollbar {
     height: 8px;
 }
 
-/* Custom Scrollbar */
+/* Barra de rolagem personalizada */
 #item-list::-webkit-scrollbar {
     width: 8px;
 }
@@ -522,7 +522,7 @@ main {
     background: var(--primary-teal-hover);
 }
 
-/* ===== Item Card (Nota Fiscal Style) ===== */
+/* ===== Card de Item (Estilo Nota Fiscal) ===== */
 .item {
     background-color: var(--bg-white);
     border: 3px solid var(--accent-gold);
@@ -544,7 +544,7 @@ main {
     box-shadow: 0 8px 25px var(--shadow-medium);
 }
 
-/* Zigzag border effect on top and bottom */
+/* Efeito de borda zigzag no topo e na base */
 .item::before,
 .item::after {
     content: '';
@@ -646,7 +646,7 @@ main {
     background-color: var(--danger-red-hover);
 }
 
-/* ===== Total Section ===== */
+/* ===== Seção do Total ===== */
 .total-display-section {
     background-color: var(--bg-white);
     border-radius: 12px;
@@ -667,7 +667,7 @@ main {
     font-size: 2rem;
 }
 
-/* ===== Empty State ===== */
+/* ===== Estado Vazio ===== */
 .empty-state {
     width: 100%;
     text-align: center;
@@ -690,7 +690,7 @@ main {
     font-size: 1rem;
 }
 
-/* ===== Responsive Design ===== */
+/* ===== Design Responsivo ===== */
 
 /* Tablets e telas médias */
 @media screen and (max-width: 900px) {
@@ -718,7 +718,7 @@ main {
 /* Mobile landscape e tablets pequenos */
 @media screen and (max-width: 730px) {
 
-    /* Header */
+    /* Cabeçalho */
     .nav-bar {
         display: flex;
         justify-content: space-between;
@@ -738,7 +738,7 @@ main {
         font-size: 1.1rem;
     }
 
-    /* Main */
+    /* Principal */
     main {
         padding: 1rem;
     }
@@ -752,7 +752,7 @@ main {
         font-size: 1.2rem;
     }
 
-    /* Mode Toggle Mobile */
+    /* Alternador de Modo Mobile */
     .mode-toggle {
         flex-direction: column;
         gap: 0.75rem;
@@ -790,7 +790,7 @@ main {
         width: 100%;
     }
 
-    /* Section Header */
+    /* Cabeçalho da Seção */
     .section-header {
         display: flex;
         flex-direction: column;
@@ -851,7 +851,7 @@ main {
         justify-content: center;
     }
 
-    /* Item List */
+    /* Lista de Itens */
     #item-list {
         justify-content: center;
         gap: 1rem;
@@ -874,7 +874,7 @@ main {
         font-size: 0.75rem;
     }
 
-    /* Empty state */
+    /* Estado vazio */
     .empty-state {
         padding: 2rem 1rem;
     }
@@ -963,7 +963,7 @@ main {
     }
 }
 
-/* ===== Animations ===== */
+/* ===== Animações ===== */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -980,7 +980,7 @@ main {
     animation: fadeIn 0.3s ease forwards;
 }
 
-/* ===== Calculator Page ===== */
+/* ===== Página da Calculadora ===== */
 .calculator-section {
     background-color: var(--bg-white);
     border-radius: 12px;
@@ -1102,7 +1102,7 @@ main {
     background-color: var(--success-green-hover);
 }
 
-/* Active link style */
+/* Estilo de link ativo */
 .nav-link.active {
     color: var(--primary-teal);
 }
@@ -1181,7 +1181,7 @@ main {
     }
 }
 
-/* About Page Styles */
+/* Estilos da Página Sobre */
 .about-section {
     padding: 3rem 1.5rem;
     max-width: 800px;
@@ -1269,7 +1269,7 @@ main {
     }
 }
 
-/* ===== Custom Modal ===== */
+/* ===== Modal Personalizado ===== */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1371,7 +1371,7 @@ main {
     box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
 }
 
-/* ===== Lista Rápida Styles ===== */
+/* ===== Estilos da Lista Rápida ===== */
 
 .section-subtitle {
     text-align: center;
@@ -1463,10 +1463,9 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    min-height: 200px;
 }
 
-/* Single Container - Nota Fiscal Style */
+/* Container Único - Estilo Nota Fiscal */
 .quick-list-container {
     background-color: var(--bg-white);
     border: 3px solid var(--accent-gold);
@@ -1474,10 +1473,9 @@ main {
     padding: 0;
     position: relative;
     box-shadow: 0 4px 15px var(--shadow-light);
-    min-height: 200px;
 }
 
-/* Zigzag effect on left edge */
+/* Efeito zigzag na borda esquerda */
 .quick-list-container::before {
     content: '';
     position: absolute;
@@ -1497,7 +1495,7 @@ main {
     flex-direction: column;
 }
 
-/* Quick Item Row (inside container) */
+/* Linha de Item Rápido (dentro do container) */
 .quick-item {
     background-color: transparent;
     border: none;
@@ -1523,7 +1521,7 @@ main {
     box-shadow: none;
 }
 
-/* Remove the old zigzag from individual items */
+/* Remove o zigzag antigo dos itens individuais */
 .quick-item::before {
     display: none;
 }
@@ -1591,7 +1589,7 @@ main {
     color: white;
 }
 
-/* Checked State - Red Strikethrough */
+/* Estado Marcado - Riscado em Vermelho */
 .quick-item.checked {
     opacity: 0.7;
     background: #fefefe;
@@ -1609,7 +1607,7 @@ main {
     color: white;
 }
 
-/* Empty State */
+/* Estado Vazio */
 .quick-empty-state {
     display: flex;
     flex-direction: column;
@@ -1631,7 +1629,7 @@ main {
     font-size: 1rem;
 }
 
-/* Weight input group */
+/* Grupo de input de peso */
 .quick-weight-group {
     max-width: 120px;
 }
@@ -1640,10 +1638,40 @@ main {
     text-align: center;
 }
 
-/* Mobile Responsive */
-@media screen and (max-width: 730px) {
+/* Responsivo Tablets (iPad Air ~820px) */
+@media screen and (max-width: 900px) {
+
+    /* Formulário Lista Rápida - Empilhar campos verticalmente em tablets */
     .quick-form-row {
-        grid-template-columns: 1fr 80px;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .quick-qty-group,
+    .quick-weight-group {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+/* Responsivo Mobile */
+@media screen and (max-width: 730px) {
+
+    /* Formulário Lista Rápida - Empilhar campos verticalmente */
+    .quick-form-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .quick-qty-group,
+    .quick-weight-group {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .quick-qty-group input,
+    .quick-weight-group input {
+        width: 100%;
     }
 
     .quick-section-header {
@@ -1678,5 +1706,18 @@ main {
 
     .quick-item-actions {
         flex-shrink: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+    /* Telas extra pequenas - garantir espaçamento adequado */
+    .quick-form-row {
+        gap: 0.6rem;
+    }
+
+    .quick-qty-group label,
+    .quick-weight-group label {
+        font-size: 0.85rem;
     }
 }
