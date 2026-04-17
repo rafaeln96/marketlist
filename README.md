@@ -1,8 +1,14 @@
 # 🛒 Market List
 
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
+![Status](https://img.shields.io/badge/Status-Ativo-success?style=for-the-badge)
+![Licença](https://img.shields.io/badge/Licen%C3%A7a-Open%20Source-blue?style=for-the-badge)
+
 Uma aplicação web para gerenciamento de lista de compras de mercado, desenvolvida com HTML, CSS e JavaScript puros.
 
-> **Última atualização:** 17 de Fevereiro de 2026
+> **Última atualização:** 16 de Abril de 2026
 
 ---
 
@@ -214,6 +220,12 @@ O projeto está configurado para deploy automático via GitHub Pages:
 ---
 
 ## 🔄 Histórico de Atualizações
+
+### v3.1.0 (16/04/2026)
+- 📸 **Fotos Inline (Sem API)**: Captura direta de fotos via câmera ou anexo com exibição simultânea ao nome do item.
+- ✨ **Busca Visual Aprimorada**: Novo carrossel horizontal de fotos no campo de busca que atua como filtro inteligente (exibe ID "P-01").
+- 🖱️ **Navegação com Scroll**: Suporte a rolagem horizontal pelo *wheel* do mouse no carrossel de fotos.
+- 🚨 **Validação de Formulário Visual**: Elementos não preenchidos recebem borda vermelha espessa e animação "shake" (tremida), sendo removidas automaticamente ao receberem foco.
 
 ### v3.0.3 (17/02/2026)
 - 🆕 **Limpar Tudo na Index**: Botão para limpar toda a lista de compras com modal de confirmação, alinhado ao título
