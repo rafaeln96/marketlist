@@ -33,6 +33,9 @@ O **Market List** é uma aplicação web que permite aos usuários criar e geren
 - ✅ Notificações visuais de feedback
 - ✨ Validação de duplicidade de itens (case-insensitive)
 - ✨ Contador de itens ao lado do total
+- ✨ **Busca Visual:** Dropdown de fotos inteligente com rolagem lateral que funciona como filtro
+- 📸 **Fotos Inline (S/ APIs)**: Tire fotos dos itens usando a câmera ou anexo com nomes opcionais
+- 🚨 **Validação Visual de Erros**: Feedback imersivo via bordas vermelhas nos campos esquecidos
 - 📦 **Suporte a itens por Peso (Kg)**
 - 📄 **Exportação PDF Profissional** com agrupamento inteligente
 - 📱 Responsividade 100% para dispositivos móveis
@@ -97,7 +100,12 @@ marketlist-main/
 - Remove item do array e localStorage
 - **Modal Personalizado**: Confirmação visual elegante (sem alertas nativos)
 
-### 4. Exportação PDF
+### 4. Busca Visual e Filtros
+- Barra de busca dinâmica para filtrar por nomes
+- Galeria tipo carrossel (Scroll Lateral) de miniaturas para todos os produtos com foto
+- Ao clicar na miniatura, aplica-se um filtro exclusivo no item correspondente e ele pisca na tela para fácil visualização
+
+### 5. Exportação PDF
 - **Design Premium**: Cores do site e efeito glassmorphism
 - **Agrupamento**: Tabelas separadas por tipo de item
 - **Resumo**: Valor total e contador destacados
