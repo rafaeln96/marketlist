@@ -136,6 +136,7 @@ let itemsArray = [
 | `modal-title` | h3 | Título dinâmico do modal |
 | `modal-message` | p | Mensagem dinâmica do modal |
 | `search-input` | input | Campo de busca |
+| `search-photo-gallery` | div | Dropdown de galeria visual para busca por fotos |
 | `item-list` | div | Container dos cards |
 | `total-value` | span | Exibe valor total |
 | `export-pdf-button` | button | Botão para gerar PDF |
@@ -272,11 +273,34 @@ function updateItemList() {
     
     const filteredItems = searchQuery 
         ? sortedItems.filter(item => 
-            item.name.toLowerCase().includes(searchQuery))
+            (item.name || '').toLowerCase().includes(searchQuery))
         : sortedItems;
     
     // ... renderização
 }
+```
+
+### Galeria de Busca Visual
+
+```javascript
+// A busca foi aprimorada para incluir uma galeria visual em formato de carrossel horizontal.
+// Quando o campo de busca ganha foco, um dropdown (.search-photo-gallery)
+// exibe as miniaturas de todos os itens com fotos.
+// A galeria permite rolagem horizontal tanto nativa quanto via roda do mouse (wheel).
+// Ao clicar numa miniatura, o filtro (searchPhotoFilterIndex) é ativado, isolando 
+// exclusivamente o item correspondente. A página rola até o item (scrollIntoView) 
+// e aplica uma animação de destaque (.highlight-item).
+// O campo de busca passa a exibir o ID da Imagem (Ex: P-01) como indicativo de filtro.
+```
+
+### Validação Visual de Campos
+
+```javascript
+// A adição e edição de itens agora contam com validação visual (clearValidationErrors).
+// Caso campos obrigatórios estejam vazios, é atribuída a classe CSS `.input-error`,
+// que aplica uma borda vermelha e uma animação "shake".
+// A validação de erro é automaticamente removida quando o usuário foca ('focus')
+// ou digita ('input') no campo destacado.
 ```
 
 ---

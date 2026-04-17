@@ -3,6 +3,9 @@ let editIndex = null; // Índice do item sendo editado
 let previousScrollPosition = 0; // Variável para armazenar a posição anterior de rolagem
 let searchQuery = ''; // Query de busca atual
 let currentMode = 'unit'; // Modo atual do formulário: 'unit' ou 'weight'
+let currentPhotoUnit = null;   // Foto capturada no modo unidade
+let currentPhotoWeight = null; // Foto capturada no modo peso
+let searchPhotoFilterIndex = null; // Armazena índice do item ao filtrar por foto
 
 // ===== Funções de Modo do Formulário =====
 
@@ -26,6 +29,7 @@ function setFormMode(mode, skipCancelEdit = false) {
         document.getElementById('item-quantity-weight').value = '1';
         document.getElementById('item-price-kg').value = '';
         document.getElementById('item-weight').value = '';
+        removePhoto('weight');
     } else {
         unitFields.style.display = 'none';
         weightFields.style.display = 'grid';
@@ -35,6 +39,7 @@ function setFormMode(mode, skipCancelEdit = false) {
         document.getElementById('item-name').value = '';
         document.getElementById('item-quantity').value = '1';
         document.getElementById('item-price').value = '';
+        removePhoto('unit');
     }
 
     // Reseta estado de edição se estiver editando (exceto quando skipCancelEdit é true)
@@ -61,6 +66,167 @@ function formatarPeso(input) {
 function parsePeso(valorFormatado) {
     if (!valorFormatado) return 0;
     return parseFloat(valorFormatado.replace(/\./g, '').replace(',', '.'));
+}
+
+// ===== Funções de Foto =====
+
+// Abre o seletor de câmera/arquivo
+function openCamera(mode) {
+    const input = document.getElementById(`camera-input-${mode}`);
+    input.click();
+}
+
+// Redimensiona uma imagem e retorna o dataUrl via callback
+function resizeImage(file, callback) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const MAX_SIZE = 300;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+            } else {
+                if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+            callback(canvas.toDataURL('image/jpeg', 0.7));
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+// Processa a foto capturada/selecionada
+function handlePhoto(input, mode) {
+    const file = input.files[0];
+    if (!file) return;
+
+    resizeImage(file, function (dataUrl) {
+        if (mode === 'unit') {
+            currentPhotoUnit = dataUrl;
+        } else {
+            currentPhotoWeight = dataUrl;
+        }
+
+        // Exibe a foto no container inline (injetada dentro do wrapper do input)
+        const wrapper = document.getElementById(`name-wrapper-${mode}`);
+        const thumbnail = document.getElementById(`photo-thumbnail-${mode}`);
+        
+        document.getElementById(`photo-img-${mode}`).src = dataUrl;
+        thumbnail.style.display = 'block';
+        wrapper.classList.add('has-photo');
+        
+        // Opcional: altera o placeholder para indicar que o nome pode ser digitado
+        const nameInput = mode === 'unit'
+            ? document.getElementById('item-name')
+            : document.getElementById('item-name-weight');
+        if (nameInput && !nameInput.value) {
+            nameInput.placeholder = 'Nome do produto...';
+            nameInput.focus();
+        }
+
+        // Reset para permitir selecionar o mesmo arquivo novamente
+        input.value = '';
+    });
+}
+
+// Remove a foto capturada e restaura o campo de nome
+function removePhoto(mode) {
+    if (mode === 'unit') {
+        currentPhotoUnit = null;
+    } else {
+        currentPhotoWeight = null;
+    }
+
+    // Restaura o layout padrão removendo a classe e ocultando a miniatura
+    const wrapper = document.getElementById(`name-wrapper-${mode}`);
+    const thumbnail = document.getElementById(`photo-thumbnail-${mode}`);
+    
+    if (thumbnail) thumbnail.style.display = 'none';
+    if (wrapper) wrapper.classList.remove('has-photo');
+
+    // Restaura o placeholder
+    const nameInput = mode === 'unit'
+        ? document.getElementById('item-name')
+        : document.getElementById('item-name-weight');
+    if (nameInput) {
+        nameInput.placeholder = mode === 'unit' ? 'Ex: Leite Integral' : 'Ex: Banana Prata';
+    }
+}
+
+// ===== Modal de Visualização de Foto ===== 
+
+function openSettings() {
+    const modal = document.getElementById('settings-modal');
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+function closeSettings() {
+    const modal = document.getElementById('settings-modal');
+    modal.classList.remove('active');
+    setTimeout(() => { modal.style.display = 'none'; }, 300);
+}
+
+function saveApiKey() {
+    closeSettings();
+}
+
+function removeApiKey() {
+    showNotification('Chave removida.', 'info');
+    closeSettings();
+}
+
+let viewingPhotoIndex = null;
+
+// Abre o modal de visualização de foto
+function openPhotoViewer(index) {
+    viewingPhotoIndex = index;
+    const item = itemsArray[index];
+    document.getElementById('photo-viewer-img').src = item.photo;
+    const modal = document.getElementById('photo-viewer-modal');
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+// Fecha o modal de visualização
+function closePhotoViewer() {
+    const modal = document.getElementById('photo-viewer-modal');
+    modal.classList.remove('active');
+    setTimeout(() => {
+        modal.style.display = 'none';
+        viewingPhotoIndex = null;
+    }, 300);
+}
+
+// Permite tirar outra foto diretamente do modal de visualização
+function retakePhoto() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function () {
+        const file = this.files[0];
+        if (!file || viewingPhotoIndex === null) return;
+
+        resizeImage(file, function (dataUrl) {
+            itemsArray[viewingPhotoIndex].photo = dataUrl;
+
+            saveToLocalStorage();
+            updateItemList();
+
+            // Atualiza a imagem no modal
+            document.getElementById('photo-viewer-img').src = dataUrl;
+            showNotification('Foto atualizada!', 'success');
+        });
+    };
+    input.click();
 }
 
 // ===== Funções de LocalStorage =====
@@ -125,6 +291,10 @@ function cancelEdit() {
     document.getElementById('market-list-form').reset();
     toggleFormButtons(false);
 
+    // Limpa fotos
+    removePhoto('unit');
+    removePhoto('weight');
+
     // Volta para a posição anterior
     window.scrollTo({
         top: previousScrollPosition,
@@ -139,30 +309,59 @@ function cancelEdit() {
 // Filtra itens por nome
 function searchItems(query) {
     searchQuery = query.toLowerCase().trim();
+    searchPhotoFilterIndex = null; // Remove o filtro de foto se começar a digitar
     updateItemList();
 }
 
-// ===== Operações CRUD =====
+// Remove classes de erro de um modo específico
+function clearValidationErrors(mode) {
+    const fields = mode === 'unit' 
+        ? ['item-name', 'item-quantity', 'item-price']
+        : ['item-name-weight', 'item-quantity-weight', 'item-price-kg', 'item-weight'];
+    
+    fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('input-error');
+    });
+}
 
-// Adiciona um item à lista
+// Adiciona um novo item à lista
 function addItem(event) {
     event.preventDefault();
 
-    let itemName, itemTotal, newItem;
+    const formMode = currentMode;
+    let newItem;
+    let itemTotal = 0;
+    let hasError = false;
 
-    if (currentMode === 'unit') {
-        // Modo unidade
-        itemName = document.getElementById('item-name').value.trim();
-        const itemQuantity = parseInt(document.getElementById('item-quantity').value, 10);
-        const itemPrice = parseMoeda(document.getElementById('item-price').value);
+    clearValidationErrors(formMode);
 
-        if (!itemName || isNaN(itemQuantity) || isNaN(itemPrice) || itemPrice <= 0) {
-            showNotification('Por favor, preencha todos os campos corretamente.', 'error');
+    if (formMode === 'unit') {
+        const itemName = document.getElementById('item-name').value.trim();
+        const itemQuantity = parseInt(document.getElementById('item-quantity').value);
+        const itemPriceStr = document.getElementById('item-price').value.trim();
+        const itemPrice = parseMoeda(itemPriceStr);
+
+        if (!itemName && !currentPhotoUnit) {
+            document.getElementById('item-name').classList.add('input-error');
+            hasError = true;
+        }
+        if (isNaN(itemQuantity) || itemQuantity <= 0) {
+            document.getElementById('item-quantity').classList.add('input-error');
+            hasError = true;
+        }
+        if (!itemPriceStr || isNaN(itemPrice) || itemPrice <= 0) {
+            document.getElementById('item-price').classList.add('input-error');
+            hasError = true;
+        }
+
+        if (hasError) {
+            showNotification('Por favor, preencha os campos destacados em vermelho.', 'error');
             return;
         }
 
-        // Verifica duplicidade
-        if (itemsArray.some(item => item.name.toLowerCase() === itemName.toLowerCase())) {
+        // Verifica duplicidade (apenas se tiver nome)
+        if (itemName && itemsArray.some(item => item.name && item.name.toLowerCase() === itemName.toLowerCase())) {
             showNotification(`O item "${itemName}" já está cadastrado na lista!`, 'error');
             return;
         }
@@ -172,24 +371,46 @@ function addItem(event) {
         newItem = {
             name: itemName,
             type: 'unit',
+            photo: currentPhotoUnit,
             quantity: itemQuantity,
             price: itemPrice,
             total: itemTotal
         };
     } else {
         // Modo peso
-        itemName = document.getElementById('item-name-weight').value.trim();
-        const itemQuantity = parseInt(document.getElementById('item-quantity-weight').value, 10);
-        const itemPriceKg = parseMoeda(document.getElementById('item-price-kg').value);
-        const itemWeight = parsePeso(document.getElementById('item-weight').value);
+        const itemName = document.getElementById('item-name-weight').value.trim();
+        const itemQuantityStr = document.getElementById('item-quantity-weight').value;
+        const itemQuantity = parseInt(itemQuantityStr, 10);
+        const itemPriceKgStr = document.getElementById('item-price-kg').value;
+        const itemPriceKg = parseMoeda(itemPriceKgStr);
+        const itemWeightStr = document.getElementById('item-weight').value;
+        const itemWeight = parsePeso(itemWeightStr);
+        const hasPhoto = currentPhotoWeight !== null;
 
-        if (!itemName || isNaN(itemQuantity) || isNaN(itemPriceKg) || itemPriceKg <= 0 || isNaN(itemWeight) || itemWeight <= 0) {
-            showNotification('Por favor, preencha todos os campos corretamente.', 'error');
+        if (!itemName && !hasPhoto) {
+            document.getElementById('item-name-weight').classList.add('input-error');
+            hasError = true;
+        }
+        if (!itemQuantityStr || isNaN(itemQuantity) || itemQuantity <= 0) {
+            document.getElementById('item-quantity-weight').classList.add('input-error');
+            hasError = true;
+        }
+        if (!itemPriceKgStr || isNaN(itemPriceKg) || itemPriceKg <= 0) {
+            document.getElementById('item-price-kg').classList.add('input-error');
+            hasError = true;
+        }
+        if (!itemWeightStr || isNaN(itemWeight) || itemWeight <= 0) {
+            document.getElementById('item-weight').classList.add('input-error');
+            hasError = true;
+        }
+
+        if (hasError) {
+            showNotification('Por favor, preencha os campos destacados em vermelho.', 'error');
             return;
         }
 
-        // Verifica duplicidade
-        if (itemsArray.some(item => item.name.toLowerCase() === itemName.toLowerCase())) {
+        // Verifica duplicidade (apenas se tiver nome)
+        if (itemName && itemsArray.some(item => item.name && item.name.toLowerCase() === itemName.toLowerCase())) {
             showNotification(`O item "${itemName}" já está cadastrado na lista!`, 'error');
             return;
         }
@@ -200,6 +421,7 @@ function addItem(event) {
         newItem = {
             name: itemName,
             type: 'weight',
+            photo: currentPhotoWeight,
             quantity: itemQuantity,
             pricePerKg: itemPriceKg,
             weight: itemWeight,
@@ -219,14 +441,17 @@ function addItem(event) {
         document.getElementById('item-name').value = '';
         document.getElementById('item-quantity').value = '1';
         document.getElementById('item-price').value = '';
+        removePhoto('unit');
     } else {
         document.getElementById('item-name-weight').value = '';
         document.getElementById('item-quantity-weight').value = '1';
         document.getElementById('item-price-kg').value = '';
         document.getElementById('item-weight').value = '';
+        removePhoto('weight');
     }
 
-    showNotification(`"${itemName}" adicionado com sucesso!`, 'success');
+    const displayName = itemName || 'Produto (foto)';
+    showNotification(`"${displayName}" adicionado com sucesso!`, 'success');
 }
 
 // Atualiza um item existente
@@ -237,20 +462,46 @@ function updateItem(event) {
 
     const editingItem = itemsArray[editIndex];
     let itemName, updatedItem;
+    let hasError = false;
+
+    clearValidationErrors(editingItem.type);
 
     if (editingItem.type === 'weight') {
         // Modo peso
         itemName = document.getElementById('item-name-weight').value.trim();
-        const itemPriceKg = parseMoeda(document.getElementById('item-price-kg').value);
-        const itemWeight = parsePeso(document.getElementById('item-weight').value);
+        const itemQuantityStr = document.getElementById('item-quantity-weight').value;
+        const itemQuantity = parseInt(itemQuantityStr, 10);
+        const itemPriceKgStr = document.getElementById('item-price-kg').value;
+        const itemPriceKg = parseMoeda(itemPriceKgStr);
+        const itemWeightStr = document.getElementById('item-weight').value;
+        const itemWeight = parsePeso(itemWeightStr);
+        const hasPhoto = currentPhotoWeight !== null;
+        const hadPhoto = editingItem.photo !== null && editingItem.photo !== undefined;
 
-        if (!itemName || isNaN(itemPriceKg) || itemPriceKg <= 0 || isNaN(itemWeight) || itemWeight <= 0) {
-            showNotification('Por favor, preencha todos os campos corretamente.', 'error');
+        if (!itemName && !hasPhoto && !hadPhoto) {
+            document.getElementById('item-name-weight').classList.add('input-error');
+            hasError = true;
+        }
+        if (!itemQuantityStr || isNaN(itemQuantity) || itemQuantity <= 0) {
+            document.getElementById('item-quantity-weight').classList.add('input-error');
+            hasError = true;
+        }
+        if (!itemPriceKgStr || isNaN(itemPriceKg) || itemPriceKg <= 0) {
+            document.getElementById('item-price-kg').classList.add('input-error');
+            hasError = true;
+        }
+        if (!itemWeightStr || isNaN(itemWeight) || itemWeight <= 0) {
+            document.getElementById('item-weight').classList.add('input-error');
+            hasError = true;
+        }
+
+        if (hasError) {
+            showNotification('Por favor, preencha os campos destacados em vermelho.', 'error');
             return;
         }
 
-        // Verifica duplicidade
-        if (itemsArray.some((item, index) => index !== editIndex && item.name.toLowerCase() === itemName.toLowerCase())) {
+        // Verifica duplicidade (apenas se tiver nome)
+        if (itemName && itemsArray.some((item, index) => index !== editIndex && item.name && item.name.toLowerCase() === itemName.toLowerCase())) {
             showNotification(`O item "${itemName}" já está cadastrado na lista!`, 'error');
             return;
         }
@@ -258,24 +509,42 @@ function updateItem(event) {
         updatedItem = {
             name: itemName,
             type: 'weight',
-            quantity: parseInt(document.getElementById('item-quantity-weight').value, 10),
+            photo: hasPhoto ? currentPhotoWeight : (editingItem.photo || null),
+            quantity: itemQuantity,
             pricePerKg: itemPriceKg,
             weight: itemWeight,
             total: itemPriceKg * itemWeight
         };
     } else {
-        // Modo unidade (default para itens antigos sem type)
+        // Modo unidade
         itemName = document.getElementById('item-name').value.trim();
-        const itemQuantity = parseInt(document.getElementById('item-quantity').value, 10);
-        const itemPrice = parseMoeda(document.getElementById('item-price').value);
+        const itemQuantityStr = document.getElementById('item-quantity').value;
+        const itemQuantity = parseInt(itemQuantityStr, 10);
+        const itemPriceStr = document.getElementById('item-price').value.trim();
+        const itemPrice = parseMoeda(itemPriceStr);
+        const hasPhoto = currentPhotoUnit !== null;
+        const hadPhoto = editingItem.photo !== null && editingItem.photo !== undefined;
 
-        if (!itemName || isNaN(itemQuantity) || isNaN(itemPrice) || itemPrice <= 0) {
-            showNotification('Por favor, preencha todos os campos corretamente.', 'error');
+        if (!itemName && !hasPhoto && !hadPhoto) {
+            document.getElementById('item-name').classList.add('input-error');
+            hasError = true;
+        }
+        if (!itemQuantityStr || isNaN(itemQuantity) || itemQuantity <= 0) {
+            document.getElementById('item-quantity').classList.add('input-error');
+            hasError = true;
+        }
+        if (!itemPriceStr || isNaN(itemPrice) || itemPrice <= 0) {
+            document.getElementById('item-price').classList.add('input-error');
+            hasError = true;
+        }
+
+        if (hasError) {
+            showNotification('Por favor, preencha os campos destacados em vermelho.', 'error');
             return;
         }
 
-        // Verifica duplicidade
-        if (itemsArray.some((item, index) => index !== editIndex && item.name.toLowerCase() === itemName.toLowerCase())) {
+        // Verifica duplicidade (apenas se tiver nome)
+        if (itemName && itemsArray.some((item, index) => index !== editIndex && item.name && item.name.toLowerCase() === itemName.toLowerCase())) {
             showNotification(`O item "${itemName}" já está cadastrado na lista!`, 'error');
             return;
         }
@@ -283,6 +552,7 @@ function updateItem(event) {
         updatedItem = {
             name: itemName,
             type: 'unit',
+            photo: hasPhoto ? currentPhotoUnit : (editingItem.photo || null),
             quantity: itemQuantity,
             price: itemPrice,
             total: itemQuantity * itemPrice
@@ -306,10 +576,12 @@ function updateItem(event) {
         document.getElementById('item-quantity-weight').value = '1';
         document.getElementById('item-price-kg').value = '';
         document.getElementById('item-weight').value = '';
+        removePhoto('weight');
     } else {
         document.getElementById('item-name').value = '';
         document.getElementById('item-quantity').value = '1';
         document.getElementById('item-price').value = '';
+        removePhoto('unit');
     }
 
     // Alterna os botões para o estado normal
@@ -371,7 +643,7 @@ function closeModal() {
 function confirmAction() {
     if (modalAction === 'remove' && pendingRemovalIndex !== null) {
         const index = pendingRemovalIndex;
-        const itemName = itemsArray[index].name;
+        const itemName = itemsArray[index].name || 'Produto (foto)';
 
         itemsArray.splice(index, 1);
         saveToLocalStorage();
@@ -411,8 +683,18 @@ function editItem(index) {
         document.getElementById('item-price-kg').value = item.pricePerKg.toFixed(2).replace('.', ',');
         document.getElementById('item-weight').value = item.weight.toFixed(3).replace('.', ',');
 
-        // Foca no campo de nome
-        setTimeout(() => document.getElementById('item-name-weight').focus(), 100);
+        // Carrega foto se existir (aplica classe has-photo)
+        if (item.photo) {
+            currentPhotoWeight = item.photo;
+            const wrapper = document.getElementById('name-wrapper-weight');
+            const thumbnail = document.getElementById('photo-thumbnail-weight');
+            document.getElementById('photo-img-weight').src = item.photo;
+            thumbnail.style.display = 'block';
+            wrapper.classList.add('has-photo');
+        } else {
+            // Foca no campo de nome
+            setTimeout(() => document.getElementById('item-name-weight').focus(), 100);
+        }
     } else {
         // Modo unidade (default para itens antigos sem type)
         setFormMode('unit', true);
@@ -420,8 +702,18 @@ function editItem(index) {
         document.getElementById('item-quantity').value = item.quantity;
         document.getElementById('item-price').value = item.price.toFixed(2).replace('.', ',');
 
-        // Foca no campo de nome
-        setTimeout(() => document.getElementById('item-name').focus(), 100);
+        // Carrega foto se existir (aplica classe has-photo)
+        if (item.photo) {
+            currentPhotoUnit = item.photo;
+            const wrapper = document.getElementById('name-wrapper-unit');
+            const thumbnail = document.getElementById('photo-thumbnail-unit');
+            document.getElementById('photo-img-unit').src = item.photo;
+            thumbnail.style.display = 'block';
+            wrapper.classList.add('has-photo');
+        } else {
+            // Foca no campo de nome
+            setTimeout(() => document.getElementById('item-name').focus(), 100);
+        }
     }
 
     // Alterna os botões para o modo de edição
@@ -439,6 +731,13 @@ function editItem(index) {
 
 // ===== Funções de Exibição =====
 
+// Executada ao digitar na barra de busca (agora salva a query e reseta o filtro de foto)
+function searchItems(query) {
+    searchQuery = query.toLowerCase().trim();
+    searchPhotoFilterIndex = null; // Remove o filtro de foto se começar a digitar
+    updateItemList();
+}
+
 // Atualiza a lista de itens e organiza em ordem alfabética
 function updateItemList() {
     const itemList = document.getElementById('item-list');
@@ -450,13 +749,20 @@ function updateItemList() {
         clearAllBtn.style.display = itemsArray.length > 0 ? 'flex' : 'none';
     }
 
-    // Ordena o array por nome
-    const sortedItems = [...itemsArray].sort((a, b) => a.name.localeCompare(b.name));
+    // Mapeia os itens mantendo o índice original, depois ordena
+    const sortedItems = itemsArray.map((item, index) => ({ item, index })).sort((a, b) => {
+        const nameA = a.item.name || 'zzz';
+        const nameB = b.item.name || 'zzz';
+        return nameA.localeCompare(nameB);
+    });
 
-    // Filtra por busca se houver query
-    const filteredItems = searchQuery
-        ? sortedItems.filter(item => item.name.toLowerCase().includes(searchQuery))
-        : sortedItems;
+    // Filtra por busca (texto) ou por foto (searchPhotoFilterIndex)
+    let filteredItems = sortedItems;
+    if (searchQuery) {
+        filteredItems = sortedItems.filter(obj => (obj.item.name || '').toLowerCase().includes(searchQuery));
+    } else if (searchPhotoFilterIndex !== null) {
+        filteredItems = sortedItems.filter(obj => obj.index === searchPhotoFilterIndex);
+    }
 
     // Mostra estado vazio se não houver itens
     if (filteredItems.length === 0) {
@@ -472,19 +778,30 @@ function updateItemList() {
         return;
     }
 
-    filteredItems.forEach((item) => {
-        // Encontra o índice original no array
-        const originalIndex = itemsArray.findIndex(i => i.name === item.name && i.total === item.total);
+    filteredItems.forEach((obj) => {
+        const item = obj.item;
+        const originalIndex = obj.index;
 
         const itemDiv = document.createElement('div');
         itemDiv.className = 'item';
+        itemDiv.id = `item-card-${originalIndex}`; // ID para navegação
+
+        // Monta HTML da foto clicável (se existir)
+        const photoHtml = item.photo
+            ? `<div class="item-photo" onclick="openPhotoViewer(${originalIndex})" title="Clique para ampliar"><img src="${item.photo}" alt="Foto do produto"></div>`
+            : '';
+        // Mostra o nome, independentemente de ter foto (se o nome foi preenchido)
+        const nameHtml = item.name
+            ? `<p><strong>Nome:</strong> <span>${escapeHtml(item.name)}</span></p>`
+            : '';
 
         let itemInfoHtml;
         if (item.type === 'weight') {
             // Item por peso
             itemInfoHtml = `
                 <div class="item-info">
-                    <p><strong>Nome:</strong> <span>${escapeHtml(item.name)}</span></p>
+                    ${photoHtml}
+                    ${nameHtml}
                     <p><strong>Quantidade:</strong> <span>${item.quantity || 1}</span></p>
                     <p><strong>Valor/Kg:</strong> <span>R$ ${item.pricePerKg.toFixed(2).replace('.', ',')}</span></p>
                     <p><strong>Peso:</strong> <span>${item.weight.toFixed(3).replace('.', ',')} Kg</span></p>
@@ -495,7 +812,8 @@ function updateItemList() {
             // Item por unidade (default para itens antigos)
             itemInfoHtml = `
                 <div class="item-info">
-                    <p><strong>Nome:</strong> <span>${escapeHtml(item.name)}</span></p>
+                    ${photoHtml}
+                    ${nameHtml}
                     <p><strong>Quantidade:</strong> <span>${item.quantity}</span></p>
                     <p><strong>Valor Unit.:</strong> <span>R$ ${item.price.toFixed(2).replace('.', ',')}</span></p>
                     <p class="item-subtotal"><strong>Subtotal:</strong> <span>R$ ${item.total.toFixed(2).replace('.', ',')}</span></p>
@@ -667,12 +985,14 @@ async function exportToPDF() {
 
             return [
                 idx + 1,
-                item.name,
+                item.name || 'Produto (foto)',
                 qty,
                 unitPrice,
                 `R$ ${item.total.toFixed(2).replace('.', ',')}`
             ];
         });
+        // Guarda referência das fotos para renderizar no PDF
+        const photoRefs = items.map(item => item.photo || null);
 
         doc.autoTable({
             startY: currentY,
@@ -701,6 +1021,27 @@ async function exportToPDF() {
                 4: { halign: 'right', fontStyle: 'bold', textColor: primaryTeal }
             },
             margin: { left: 20, right: 20 },
+            // Aumenta altura das linhas que têm foto
+            didParseCell: (data) => {
+                if (data.column.index === 1 && data.section === 'body') {
+                    const photo = photoRefs[data.row.index];
+                    if (photo) {
+                        data.cell.styles.minCellHeight = 20;
+                    }
+                }
+            },
+            // Desenha foto na célula PRODUTO
+            didDrawCell: (data) => {
+                if (data.column.index === 1 && data.section === 'body') {
+                    const photo = photoRefs[data.row.index];
+                    if (photo) {
+                        const imgSize = 14;
+                        const x = data.cell.x + 2;
+                        const y = data.cell.y + (data.cell.height - imgSize) / 2;
+                        doc.addImage(photo, 'JPEG', x, y, imgSize, imgSize);
+                    }
+                }
+            },
             didDrawPage: (data) => {
                 currentY = data.cursor.y;
             }
@@ -769,6 +1110,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Fechar modal de visualização de foto ao clicar fora
+    document.getElementById('photo-viewer-modal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closePhotoViewer();
+        }
+    });
+
     // Bloquear letras nos campos de preço (apenas dígitos permitidos)
     ['item-price', 'item-price-kg'].forEach(function (id) {
         document.getElementById(id).addEventListener('keypress', function (e) {
@@ -784,4 +1132,118 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
         }
     });
+
+    // Eventos para a Galeria de Busca por Foto
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('focus', populateSearchGallery);
+        searchInput.addEventListener('blur', hideSearchGallery);
+    }
+
+    // Remove erro visual ao interagir com o campo
+    const allInputs = document.querySelectorAll('input, select');
+    allInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.classList.remove('input-error');
+        });
+        input.addEventListener('input', function() {
+            this.classList.remove('input-error');
+        });
+    });
+
+    // Permite rolar a galeria de busca lateralmente usando o scroll do mouse (vertical -> horizontal)
+    const gallery = document.getElementById('search-photo-gallery');
+    if (gallery) {
+        gallery.addEventListener('wheel', function(e) {
+            if (e.deltaY !== 0) {
+                e.preventDefault(); // Impede a rolagem da página inteira
+                this.scrollLeft += e.deltaY; // Move a barra de rolagem horizontal
+            }
+        });
+    }
 });
+
+// ===== Funções da Galeria de Busca =====
+
+function populateSearchGallery() {
+    const gallery = document.getElementById('search-photo-gallery');
+    if (!gallery) return;
+
+    // Filtra apenas itens que têm foto
+    const itemsWithPhotos = itemsArray.map((item, index) => ({ item, index })).filter(obj => obj.item.photo);
+
+    // Se não houver fotos na lista, não mostra o dropdown
+    if (itemsWithPhotos.length === 0) {
+        gallery.style.display = 'none';
+        return;
+    }
+
+    gallery.innerHTML = '';
+    
+    // Adiciona as miniaturas
+    itemsWithPhotos.forEach(obj => {
+        const img = document.createElement('img');
+        img.src = obj.item.photo;
+        img.className = 'search-photo-thumbnail';
+        img.alt = obj.item.name || 'Produto';
+        img.title = obj.item.name || 'Ir para o produto';
+        
+        // No mousedown em vez de click, porque o blur do input acontece antes do click, fechando a galeria.
+        img.addEventListener('mousedown', (e) => {
+            e.preventDefault(); // Impede que o input perca o foco imediatamente
+            scrollToItem(obj.index);
+        });
+
+        gallery.appendChild(img);
+    });
+
+    gallery.style.display = 'flex';
+}
+
+function hideSearchGallery() {
+    const gallery = document.getElementById('search-photo-gallery');
+    if (gallery) {
+        // Pequeno atraso para garantir que cliques na galeria sejam processados
+        setTimeout(() => {
+            gallery.style.display = 'none';
+        }, 150);
+    }
+}
+
+function scrollToItem(index) {
+    hideSearchGallery();
+    
+    // Agora, em vez de apenas rolar, vamos FILTRAR a lista por este item
+    searchPhotoFilterIndex = index;
+    const item = itemsArray[index];
+    
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        // Formata o ID da imagem (ex: P-01, P-02) baseando-se no originalIndex + 1
+        const photoId = "P-" + String(index + 1).padStart(2, '0');
+        
+        // Insere o nome ou o ID formatado para o usuário poder "Limpar" apagando o texto
+        searchInput.value = item.name ? item.name : photoId;
+        searchQuery = ''; // limpa a query de texto para não conflitar
+    }
+
+    // Atualiza a lista com o filtro aplicado
+    updateItemList();
+
+    // Procura o card e rola até ele
+    setTimeout(() => {
+        const itemCard = document.getElementById(`item-card-${index}`);
+        if (itemCard) {
+            itemCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Adiciona a classe de destaque e remove depois que a animação (2s) terminar
+            itemCard.classList.remove('highlight-item'); // reseta caso já tenha
+            void itemCard.offsetWidth; // força reflow
+            itemCard.classList.add('highlight-item');
+            
+            setTimeout(() => {
+                if(itemCard) itemCard.classList.remove('highlight-item');
+            }, 2000);
+        }
+    }, 50);
+}
